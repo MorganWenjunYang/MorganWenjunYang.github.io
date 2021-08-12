@@ -71,6 +71,40 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
+            <a href="/2021/08/06/streamlit/" itemprop="url">streamlit</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-08-06T13:55:55.000Z" itemprop="datePublished">Aug 6 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            a few seconds read (About 0 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
             <a href="/2021/08/06/ticketmaster/" itemprop="url">ticketmaster</a>
         
     </h1>
@@ -119,13 +153,34 @@
         <span class="column is-narrow">
             
             
-            a minute read (About 180 words)
+            7 minutes read (About 1054 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><p>参考网址：</p>
+        <html><head></head><body><p>可能是最简单的部署方式。</p>
+<p>当在flask里使用app.run（）的时候在运行flask的时候，我们只是将app部署到了一个测试环境，而真正将我们的app分享给更多人使用，需要经过更多的步骤。</p>
+<p>首先简单讲一下我对docker的理解（完全不一定准确）。dockerhub就如同GitHub一样，是一个托管平台，不同点在于github托管的是代码，dockerhub托管的则是镜像。Github的代码clone到本地后并不能直接使用，比如当在代码中import numpy as np或者library(tidyr)，而你的环境中并没有这个包时，显然这些代码并不能一下子顺利的运行，你需要先下载所有依赖的包，另外也可能存在潜在的路径问题。对于docker来说，它所保存的不仅是代码，而是将整个代码和它运行的环境打包成一个镜像，用户下载镜像，得到的就是一个独立自洽的小宇宙（其实是小宇宙模板，我们之后再说），可以不经任何处理，直接使用。</p>
+<p>与镜像-image紧密相连的一个概念是容器-container。 镜像只是一个模板，从这个模板我们可以创造出很多容器，每个容器内部都是一样的环境，运行一样的程序。也就是说，只要每个用户都将同样的镜像下载到本地，并在此之上运行容器，那么我们就可以保证所有用户都在一样的环境下运行一样的程序。</p>
+<p>来详细看一下实际操作。</p>
+<ol>
+<li>下载Gunicorn和Gevent两个包：<br><code>pip install gunicorn gevent</code><br>在应用目录为gunicorn建立配置文件，/gunicorn.conf.py，内容如下：<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">workers = 5    # 定义同时开启的处理请求的进程数量，根据网站流量适当调整</span><br><span class="line">worker_class = "gevent"   # 采用gevent库，支持异步处理请求，提高吞吐量</span><br><span class="line">bind = "0.0.0.0:80"  </span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<p>可以使用gunicorn命令来测试是否可以正确运行，命令如下，打开网址127.0.0.1:80，将会打开我们的网站。<br><code>gunicorn start:app -c gunicorn.conf.py</code></p>
+<ol start="2">
+<li><p>对于win系统来说，首先需要下载windows terminal和ubuntu，这样我们就可以在win系统上使用linux cmd。请follow如下链接，在ubuntu中下载docker<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-link.html">Ubuntu Docker 安装</a></p>
+</li>
+<li><p>为该应用创建一个 requirements.txt 文件，以便容器里面 python 环境的安装：/requirements.txt。e.g. 如果你的项目用到了flask，numpy，pandas，那该文件就会像这样</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flask</span><br><span class="line">numpy</span><br><span class="line">pandas</span><br><span class="line">......</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>建立Dockerfile<br>在真正把我们的app封装成镜像之前，还需要在应用目录建立Dockerfile文档（注意，这个文件不是txt，是一个没有扩展名的温度）。Dockerfile的内容</p>
+</li>
+<li><p>生成镜像<br>在linux cmd中进入到flask项目的目录，输入<br> ``</p>
+</li>
+<li><p>上传至镜像托管平台（以dockerhub为例）</p>
+</li>
+</ol>
+<p>参考网址：</p>
 <ul>
 <li><p>Flask + Docker 无脑部署新手教程</p>
 <ul>
@@ -175,6 +230,31 @@
 <li><p>如何上传镜像到dockerhub</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/steakliu/p/13626075.html">https://www.cnblogs.com/steakliu/p/13626075.html</a></li>
+</ul>
+</li>
+<li><p>cron测试器</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.bejson.com/othertools/cron/">https://www.bejson.com/othertools/cron/</a></li>
+</ul>
+</li>
+<li><p>cron范例</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/longzhongxiaoniao/article/details/89344250">https://blog.csdn.net/longzhongxiaoniao/article/details/89344250</a></li>
+</ul>
+</li>
+<li><p>vim指南</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-vim.html">https://www.runoob.com/linux/linux-vim.html</a></li>
+</ul>
+</li>
+<li><p>Linux定时运行Python脚本</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/a624806998/article/details/79499523">https://blog.csdn.net/a624806998/article/details/79499523</a></li>
+</ul>
+</li>
+<li><p>从本地发送文件到云服务器</p>
+<ul>
+<li>ECS云助手</li>
 </ul>
 </li>
 </ul>
@@ -616,41 +696,6 @@
 <p>逐个击败政敌后，秀吉的权力来到了巅峰，信长不曾做到的关白、太政大臣，他一一收归己有。也许是我的刻板印象吧，当一个男人拥有了所有，他对没有征服的人/事的渴望就会达到顶峰。传闻市姬的长女茶茶和她十分相似，这似乎可以解释秀吉染指茶茶的原因，又或者茶茶也只不过是他征服的一个个高门贵女之一。总而言之，茶茶成为了秀吉的侧室，号为淀殿，说到这里，不得不说秀吉也是惯犯了，之前的另一位养女——好兄弟前田利家之女也被他收作了侧室。茶茶与其他人的不同除了肖似市姬之外，最重要的是她给秀吉带来了继承人。秀吉曾有一子名秀胜，但不幸夭折，过后多年毫无子息，秀吉因而将外甥三好秀次收为养子。在秀吉五十二岁时，淀殿/茶茶生下了儿子鹤松，秀吉为其取小名为‘舍’，以期用一个贱命为孩子消灾解难，而不幸的是鹤松三岁便夭折了。这个孩子的降生让秀吉本已属意秀次，决定好好培养秀次的心又动摇了。四年后，淀殿又生下了秀赖。这一次，丰臣政权的矛盾开始真正显露出来。</p>
 <p>这里想要推荐一部日本历史小说——《丰臣家的人们》，本书出自历史小说大师司马辽太郎之手，书中以丰臣秀吉身边的几个人为主题，从不同人的不同命运轨迹，描绘了丰臣政权的兴衰。其中下场最悲惨，人生起落之大，要数秀吉的外甥秀次了。秀次本就是中人之姿，如果时代没有造就他的叔父，他也许就可以做一个普通的农家子弟，在乱世之中过尽可能普通的生活。然而，命运让他做了名家三好家的继承人，又继而成为丰臣家族的继承人，就注定了秀次这一生不可能平静的度过。正如名言所说，“命运给予的礼物早在暗中标好了价格”，而秀次的礼物需要用性命来偿还。</p>
 <p>可以想见，当秀吉的亲生儿子出生，秀吉又身体康健，秀次作为丰臣家族继承人的身份是岌岌可危的。最后处决了关白秀次一家所有人</p>
-</body></html>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/05/20/monogatari/" itemprop="url">物语杂谈</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-05-19T16:12:57.000Z" itemprop="datePublished">May 20 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            a few seconds read (About 34 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>源氏物语<br>平家物语<br>落洼物语<br>伊势物语<br>交野少将物语<br>雨月物语<br>竹取物语<br>春雨物语</p>
 </body></html>
     
     </div>
