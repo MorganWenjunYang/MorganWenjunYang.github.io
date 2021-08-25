@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            12 minutes read (About 1842 words)
+            12 minutes read (About 1843 words)
         </span>
         
     </div>
@@ -95,6 +95,8 @@
 <p>首先简单讲一下我对docker的理解（完全不一定准确）。dockerhub就如同GitHub一样，是一个托管平台，不同点在于github托管的是代码，dockerhub托管的则是镜像。Github的代码clone到本地后并不能直接使用，比如当在代码中import numpy as np或者library(tidyr)，而你的环境中并没有这个包时，显然这些代码并不能一下子顺利的运行，你需要先下载所有依赖的包，另外也可能存在潜在的路径问题。对于docker来说，它所保存的不仅是代码，而是将整个代码和它运行的环境打包成一个镜像，用户下载镜像，得到的就是一个独立自洽的小宇宙（其实是小宇宙模板，我们之后再说），可以不经任何处理，直接使用。</p>
 <p>与镜像-image紧密相连的一个概念是容器-container。 镜像只是一个模板，从这个模板我们可以创造出很多容器，每个容器内部都是一样的环境，运行一样的程序。也就是说，只要每个用户都将同样的镜像下载到本地，并在此之上运行容器，那么我们就可以保证所有用户都在一样的环境下运行一样的程序。</p>
 <p>来详细看一下实际操作。</p>
+<span id="more"></span>
+
 <ol>
 <li><strong>下载Gunicorn和Gevent两个包：</strong><figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install gunicorn gevent</span><br></pre></td></tr></tbody></table></figure>
 在应用目录为gunicorn建立配置文件，/gunicorn.conf.py，内容如下：<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">workers = 5    # 定义同时开启的处理请求的进程数量，根据网站流量适当调整</span><br><span class="line">worker_class = "gevent"   # 采用gevent库，支持异步处理请求，提高吞吐量</span><br><span class="line">bind = "0.0.0.0:80"  </span><br></pre></td></tr></tbody></table></figure>

@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>leetcode_sql - Morgan Freewoman</title>
+<title>Leetcode上的SQL题 - Morgan Freewoman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -70,7 +70,7 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            leetcode_sql
+            Leetcode上的SQL题
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -84,13 +84,350 @@
         <span class="column is-narrow">
             
             
-            a few seconds read (About 0 words)
+            9 minutes read (About 1316 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        
+        <html><head></head><body><p>本篇整理Leetcode SQL当中比较有代表性、比较易错的某些题目，以供未来学习、复习之用。</p>
+<h3 id="题目1179-Reformat-Department-Table"><a href="#题目1179-Reformat-Department-Table" class="headerlink" title="题目1179. Reformat Department Table:"></a><strong>题目1179. Reformat Department Table:</strong></h3><p>Table: Department</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>revenue</td>
+<td>int</td>
+</tr>
+<tr>
+<td>month</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>(id, month) is the primary key of this table.<br>The table has information about the revenue of each department per month.<br>The month has values in [“Jan”,”Feb”,”Mar”,”Apr”,”May”,”Jun”,”Jul”,”Aug”,”Sep”,”Oct”,”Nov”,”Dec”].</p>
+<p>Write an SQL query to reformat the table such that there is a department id column and a revenue column for each month.</p>
+<span id="more"></span>
+<p><strong>Answer:</strong>  </p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">id,</span><br><span class="line">sum(case when month='jan' then revenue else null end) as Jan_Revenue,</span><br><span class="line">sum(case when month = 'feb' then revenue else null end) as Feb_Revenue,</span><br><span class="line">sum(case when month = 'mar' then revenue else null end) as Mar_Revenue,</span><br><span class="line">sum(case when month = 'apr' then revenue else null end) as Apr_Revenue,</span><br><span class="line">sum(case when month = 'may' then revenue else null end) as May_Revenue,</span><br><span class="line">sum(case when month = 'jun' then revenue else null end) as Jun_Revenue,</span><br><span class="line">sum(case when month = 'jul' then revenue else null end) as Jul_Revenue,</span><br><span class="line">sum(case when month = 'aug' then revenue else null end) as Aug_Revenue,</span><br><span class="line">sum(case when month = 'sep' then revenue else null end) as Sep_Revenue,</span><br><span class="line">sum(case when month = 'oct' then revenue else null end) as Oct_Revenue,</span><br><span class="line">sum(case when month = 'nov' then revenue else null end) as Nov_Revenue,</span><br><span class="line">sum(case when month = 'dec' then revenue else null end) as Dec_Revenue</span><br><span class="line">from department</span><br><span class="line">group by id</span><br><span class="line">order by id</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>用case when … then … else … end 避免使用多个select来建立多个新的column</p>
+<hr>
+<h3 id="题目180-Consecutive-Numbers"><a href="#题目180-Consecutive-Numbers" class="headerlink" title="题目180. Consecutive Numbers:"></a><strong>题目180. Consecutive Numbers:</strong></h3><p>Table: Logs</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>num</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>id is the primary key for this table.<br>Write an SQL query to find all numbers that appear at least three times consecutively.Return the result table in any order.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">distinct l1.num as ConsecutiveNums</span><br><span class="line">from</span><br><span class="line">Logs l1,</span><br><span class="line">Logs l2,</span><br><span class="line">Logs l3</span><br><span class="line">where l1.id = l2.id - 1</span><br><span class="line">and l2.id = l3.id - 1</span><br><span class="line">and l1.num = l2.num</span><br><span class="line">and l2.num = l3.num</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>连续天数/连续数字问题可以先做Cartesian Product，然后再用where筛选符合条件的记录。<br>但是这样的话，空间上是否占用过多？</p>
+<hr>
+<h3 id="题目196-Delete-Duplicate-Emails"><a href="#题目196-Delete-Duplicate-Emails" class="headerlink" title="题目196. Delete Duplicate Emails:"></a><strong>题目196. Delete Duplicate Emails:</strong></h3><p>Write a SQL query to delete all duplicate email entries in a table named Person, keeping only unique emails based on its smallest Id.</p>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><a href="mailto:john@example.com">john@example.com</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="mailto:bob@example.com">bob@example.com</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="mailto:john@example.com">john@example.com</a></td>
+</tr>
+</tbody></table>
+<p>Id is the primary key column for this table.<br>For example, after running your query, the above Person table should have the following rows:</p>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><a href="mailto:john@example.com">john@example.com</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="mailto:bob@example.com">bob@example.com</a></td>
+</tr>
+</tbody></table>
+<p>Your output is the whole Person table after executing your sql. Use delete statement.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">delete from Person</span><br><span class="line">where Id in</span><br><span class="line">(select Id from(</span><br><span class="line">    select Id, rank() over(partition by Email order by Id) as myrank</span><br><span class="line">        from Person</span><br><span class="line">)as t</span><br><span class="line">where myrank&gt;=2</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>Delete from … where …</p>
+<hr>
+<h3 id="题目1132-Reported-Posts-II"><a href="#题目1132-Reported-Posts-II" class="headerlink" title="题目1132. Reported Posts II:"></a><strong>题目1132. Reported Posts II:</strong></h3><p>Table: Actions</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>post_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>action_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>action</td>
+<td>enum</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table, it may have duplicate rows.<br>The action column is an ENUM type of (‘view’, ‘like’, ‘reaction’, ‘comment’, ‘report’, ‘share’).<br>The extra column has optional information about the action such as a reason for report or a type of reaction.</p>
+<p>Table: Removals</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>post_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>remove_date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>post_id is the primary key of this table.<br>Each row in this table indicates that some post was removed as a result of being reported or as a result of an admin review.</p>
+<p>Write an SQL query to find the average for daily percentage of posts that got removed after being reported as spam, rounded to 2 decimal places.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">select round(avg(rm/all_rp)*100,2) as average_daily_percent</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select</span><br><span class="line">count(distinct a.post_id) as all_rp,</span><br><span class="line">count(distinct r.post_id) as rm</span><br><span class="line">from Actions a</span><br><span class="line">left join Removals r</span><br><span class="line">on a.post_id = r.post_id</span><br><span class="line">where action='report' and extra = 'spam'</span><br><span class="line">group by action_date</span><br><span class="line">)t</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Insights:</strong><br>注意left join而不是join，避免不在actions内的记录被count计算到</p>
+<hr>
+<h3 id="题目1355-Activity-Participants"><a href="#题目1355-Activity-Participants" class="headerlink" title="题目1355. Activity Participants:"></a><strong>题目1355. Activity Participants:</strong></h3><p>Table: Friends</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>activity</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>id is the id of the friend and primary key for this table.<br>name is the name of the friend.<br>activity is the name of the activity which the friend takes part in.</p>
+<p>Table: Activities</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>id is the primary key for this table.<br>name is the name of the activity.</p>
+<p>Write an SQL query to find the names of all the activities with neither maximum, nor minimum number of participants.</p>
+<p>Return the result table in any order. Each activity in table Activities is performed by any person in the table Friends.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select activity</span><br><span class="line">from friends</span><br><span class="line">group by activity</span><br><span class="line">having count(*)&gt; (select count(*) from friends group by activity order by 1 limit 1)</span><br><span class="line">and count(*)&lt; (select count(*) from friends group by activity order by 1 desc limit 1)</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT activity</span><br><span class="line">FROM (</span><br><span class="line">SELECT activity, DENSE_RANK () OVER (ORDER BY COUNT(*) DESC) RK, DENSE_RANK () OVER (ORDER BY COUNT(*)) RK2</span><br><span class="line">FROM Friends</span><br><span class="line">GROUP BY 1) TEMP</span><br><span class="line">WHERE rk != 1 and rk2 !=1</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<ul>
+<li>nested query 的使用的区别</li>
+<li>不是题干给出的每张表都有用</li>
+<li>双向窗口函数</li>
+<li>dense_rank与rank的区别</li>
+</ul>
+<hr>
+<h3 id="题目602-Friends-Requests-II-Who-has-the-most-friends"><a href="#题目602-Friends-Requests-II-Who-has-the-most-friends" class="headerlink" title="题目602. Friends Requests II: Who has the most friends:"></a><strong>题目602. Friends Requests II: Who has the most friends:</strong></h3><p>In social network like Facebook or Twitter, people send friend requests and accept others’ requests as well.</p>
+<p>Table request_accepted</p>
+<table>
+<thead>
+<tr>
+<th>requester_id</th>
+<th>accepter_id</th>
+<th>accept_date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>2</td>
+<td>2016_06-03</td>
+</tr>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>2016-06-08</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>2016-06-08</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>2016-06-09</td>
+</tr>
+</tbody></table>
+<p>This table holds the data of friend acceptance, while requester_id and accepter_id both are the id of a person.</p>
+<p>Write a query to find the the people who has most friends and the most friends number under the following rules:</p>
+<p>It is guaranteed there is only 1 people having the most friends.<br>The friend request could only been accepted once, which mean there is no multiple records with the same requester_id and accepter_id value.<br>For the sample data above, the result is:</p>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>num</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>The person with id ‘3’ is a friend of people ‘1’, ‘2’ and ‘4’, so he has 3 friends in total, which is the most number than any others.<br>Follow-up:<br>In the real world, multiple people could have the same most number of friends, can you find all these people in this case?</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+<h3 id="题目1327-List-the-Products-Ordered-in-a-Period"><a href="#题目1327-List-the-Products-Ordered-in-a-Period" class="headerlink" title="题目1327. List the Products Ordered in a Period:"></a><strong>题目1327. List the Products Ordered in a Period:</strong></h3><p>Table: Products</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>product_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>product_name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>product_category</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>product_id is the primary key for this table.<br>This table contains data about the company’s products.</p>
+<p>Table: Orders</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>product_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>order_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>unit</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table. It may have duplicate rows.<br>product_id is a foreign key to Products table.<br>unit is the number of products ordered in order_date.</p>
+<p>Write an SQL query to get the names of products with greater than or equal to 100 units ordered in February 2020 and their amount.<br>Return result table in any order.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+<h3 id="题目1398-Customers-Who-Bought-Product-A-and-B-but-Not-C"><a href="#题目1398-Customers-Who-Bought-Product-A-and-B-but-Not-C" class="headerlink" title="题目1398. Customers Who Bought Product A and B but Not C:"></a><strong>题目1398. Customers Who Bought Product A and B but Not C:</strong></h3><p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+<p><strong>题目1045. Customers Who Bought All Products:</strong></p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+<p><strong>题目262. Trips and Users:</strong></p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+<p><strong>题目615. Average Salary: Departments VS Company:</strong></p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Leetcode/">#Leetcode</a></span>
     
     </div>
     

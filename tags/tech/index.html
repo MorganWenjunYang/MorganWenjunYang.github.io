@@ -78,6 +78,41 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
+            <a href="/2021/08/23/spark-intro/" itemprop="url">spark_intro</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-08-23T11:31:48.000Z" itemprop="datePublished">Aug 23 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            a few seconds read (About 21 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>本篇主要是《Spark快速大数据分析》一书的笔记。</p>
+</body></html>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
             <a href="/2021/08/06/streamlit/" itemprop="url">Streamlit的基本操作</a>
         
     </h1>
@@ -168,7 +203,7 @@
         <span class="column is-narrow">
             
             
-            12 minutes read (About 1842 words)
+            12 minutes read (About 1843 words)
         </span>
         
     </div>
@@ -178,54 +213,10 @@
 <p>当在flask里使用app.run（）的时候在运行flask的时候，我们只是将app部署到了一个测试环境，而真正将我们的app分享给更多人使用，需要经过更多的步骤。</p>
 <p>首先简单讲一下我对docker的理解（完全不一定准确）。dockerhub就如同GitHub一样，是一个托管平台，不同点在于github托管的是代码，dockerhub托管的则是镜像。Github的代码clone到本地后并不能直接使用，比如当在代码中import numpy as np或者library(tidyr)，而你的环境中并没有这个包时，显然这些代码并不能一下子顺利的运行，你需要先下载所有依赖的包，另外也可能存在潜在的路径问题。对于docker来说，它所保存的不仅是代码，而是将整个代码和它运行的环境打包成一个镜像，用户下载镜像，得到的就是一个独立自洽的小宇宙（其实是小宇宙模板，我们之后再说），可以不经任何处理，直接使用。</p>
 <p>与镜像-image紧密相连的一个概念是容器-container。 镜像只是一个模板，从这个模板我们可以创造出很多容器，每个容器内部都是一样的环境，运行一样的程序。也就是说，只要每个用户都将同样的镜像下载到本地，并在此之上运行容器，那么我们就可以保证所有用户都在一样的环境下运行一样的程序。</p>
-<p>来详细看一下实际操作。</p>
-<ol>
-<li><strong>下载Gunicorn和Gevent两个包：</strong><figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install gunicorn gevent</span><br></pre></td></tr></tbody></table></figure>
-在应用目录为gunicorn建立配置文件，/gunicorn.conf.py，内容如下：<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">workers = 5    # 定义同时开启的处理请求的进程数量，根据网站流量适当调整</span><br><span class="line">worker_class = "gevent"   # 采用gevent库，支持异步处理请求，提高吞吐量</span><br><span class="line">bind = "0.0.0.0:80"  </span><br></pre></td></tr></tbody></table></figure>
-可以使用gunicorn命令来测试是否可以正确运行，命令如下，打开网址127.0.0.1:80，将会打开我们的网站。<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gunicorn start:app -c gunicorn.conf.py</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<ol start="2">
-<li><strong>下载linux cmd</strong><br>对于win系统来说，首先需要下载windows terminal和ubuntu，这样我们就可以在win系统上使用linux cmd。请follow如下链接，在ubuntu中下载docker<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-link.html">Ubuntu Docker 安装</a></li>
-</ol>
-<ol start="3">
-<li><strong>创建requirements文件</strong><br>为该应用创建一个 requirements.txt 文件，以便容器里面 python 环境的安装：/requirements.txt。e.g. 如果你的项目用到了flask，numpy，pandas，那该文件就会像这样<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flask</span><br><span class="line">numpy</span><br><span class="line">pandas</span><br><span class="line">......</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<ol start="4">
-<li><strong>建立Dockerfile</strong><br>在真正把我们的app封装成镜像之前，还需要在应用目录建立Dockerfile文档（注意，这个文件不是txt，是一个没有扩展名的文件）。Dockerfile的内容包括复制文件到容器内路径，需要在容器内命令行run的指令等。Dockerfile的细节请参考<a target="_blank" rel="noopener" href="https://www.runoob.com/docker/docker-dockerfile.html">如何编写dockerfile</a><br>一个简单的例子如下：<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.6</span><br><span class="line">WORKDIR /Project/demo</span><br><span class="line"></span><br><span class="line">COPY requirements.txt ./</span><br><span class="line">RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line">COPY . .</span><br><span class="line"></span><br><span class="line">CMD ["gunicorn", "start:app", "-c", "./gunicorn.conf.py"]</span><br></pre></td></tr></tbody></table></figure>
-其中，第二行 WORKDIR 后面写的是要部署到服务器上的路径，最后一行里面的 start 是我们上面写的 python 启动文件名，app 是启动文件里面要启动的应用名（变量名）<br>也就是说在这个例子里，你的flask主程序/启动程序应该叫做start.py，在这个py文件中，你定义的flask app名字叫做app。当容器运行时，它会自动地下载requirements文件中指定的包，复制所有文件到容器根目录，并在容器cmd中按照配置文件上线flask程序。</li>
-</ol>
-<ol start="5">
-<li><strong>生成镜像</strong><br>在linux cmd中进入到flask项目的目录，输入<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker build -t 'nameOfYourImage'</span><br></pre></td></tr></tbody></table></figure>
-回车执行后，输入<code>sudo docker images</code>，可以看到新生成的镜像</li>
-</ol>
-<ol start="6">
-<li><strong>上传至镜像托管平台（以dockerhub为例）</strong><br>dockerhub是一个镜像托管平台，和github一样，如果你要在另一台电脑使用代码，你需要执行一个上传下拉的操作。（当然你也可以使用其他镜像托管平台）首先注册dockerhub账号，免费用户将只能拥有一个repository，也就是只能存储一个镜像（和它的不同版本）。<br>这时候继续回到本地linux cmd，我们需要在本地使用<code>docker login</code>登录dockerhub，成功登陆后，将我们之前建立的镜像根据dockerhub的账户名和repository名重命名，并打上tag。<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag previousImageID(SHA) yourAccountName/youRepoName:Tagname</span><br></pre></td></tr></tbody></table></figure>
-接下来使用，像github一样，使用<code>docker push yourAccountName/youRepoName:Tagname</code>将我们的镜像push到dockerhub。</li>
-</ol>
-<ol start="7">
-<li><strong>在服务器下载docker，下拉镜像并运行容器</strong><br>不管是centOS，aliyun linux还是ubuntu，在你的服务器上下载docker，对于aliyun linux来说可能是podman。但不论如何，你需要一个镜像管理工具。<br>以下以podman为例：<br>用<code>podman pull yourAccountName/youRepoName:Tagname</code>从dockerhub拉取镜像到本地<br>接下来用如下代码，基于镜像建立容器，并让容器运行起来，上线我们的flask app：<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">podman run -d -p 80:80 --name imageName(or SHA) containerName</span><br></pre></td></tr></tbody></table></figure>
-此时输入<code>podman ps</code>，可以看到我们的容器正在运行。<br>注意 -p 80:80 说明我们把容器的80端口映射到服务器的80端口。还记得我们在第一步创建的配置文件将我们的程序绑定到80端口，所以这里我们需要把容器的80端口映射出去，我们才能够在外部访问它，这个服务器端口不一定是80，可以是任何你希望的端口，但注意要在设置服务器时把这个端口开放给外部使用。</li>
-</ol>
-<p><strong>That’s it! Have fun with docker!</strong></p>
-<p>参考网址：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/78432719">Flask + Docker 无脑部署新手教程</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiadongqing/p/6144053.html">docker-image container 基本操作 -常用命令</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35789269/article/details/116899903">网络调试指令ping、telnet、curl</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/CoderPai/article/details/84433481">docker系列学习（二）：Docker + Flask 例子 （全系列值得一看）</a></li>
-<li><a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/docker_practice/container/run">easybook: Docker 从入门到实践</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.tutorialworks.com/why-containers-stop/">Why Does My Docker Container Stop?</a></li>
-<li><a target="_blank" rel="noopener" href="https://betterprogramming.pub/understanding-docker-container-exit-codes-5ee79a1d58f6">Container exit code</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_17639365/article/details/86655177">dockerfile——EXPOSE和端口映射参数-p、-P总结</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.runoob.com/docker/docker-dockerfile.html">如何编写dockerfile</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/steakliu/p/13626075.html">如何上传镜像到dockerhub</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bejson.com/othertools/cron/">cron测试器</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/longzhongxiaoniao/article/details/89344250">cron范例</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-vim.html">vim指南</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/a624806998/article/details/79499523">Linux定时运行Python脚本</a></li>
-<li>从本地发送文件到云服务器–ECS云助手</li>
-</ul>
-</body></html>
+<p>来详细看一下实际操作。</p></body></html>
+        <p class="article-more-link">
+            <a href="/2021/08/06/flask-docker/#more">Read More</a>
+        </p>
     
     </div>
     
