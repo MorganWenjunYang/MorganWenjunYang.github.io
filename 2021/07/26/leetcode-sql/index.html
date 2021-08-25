@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>Leetcode上的SQL题 - Morgan Freewoman</title>
+<title>Leetcode上的SQL题（Part 1） - Morgan Freewoman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -70,7 +70,7 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            Leetcode上的SQL题
+            Leetcode上的SQL题（Part 1）
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            9 minutes read (About 1316 words)
+            16 minutes read (About 2392 words)
         </span>
         
     </div>
@@ -344,9 +344,9 @@
 </tbody></table>
 <p>The person with id ‘3’ is a friend of people ‘1’, ‘2’ and ‘4’, so he has 3 friends in total, which is the most number than any others.<br>Follow-up:<br>In the real world, multiple people could have the same most number of friends, can you find all these people in this case?</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">select requester_id as id, count(*) as num</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select requester_id, accepter_id</span><br><span class="line">from</span><br><span class="line">request_accepted r1</span><br><span class="line">union</span><br><span class="line">select accepter_id, requester_id</span><br><span class="line">from</span><br><span class="line">request_accepted r2</span><br><span class="line">)t</span><br><span class="line">group by requester_id</span><br><span class="line">order by num desc</span><br><span class="line">limit 1</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>union all: keep all the duplicate entry<br>union: only keep the distinct ones</p>
 <hr>
 <h3 id="题目1327-List-the-Products-Ordered-in-a-Period"><a href="#题目1327-List-the-Products-Ordered-in-a-Period" class="headerlink" title="题目1327. List the Products Ordered in a Period:"></a><strong>题目1327. List the Products Ordered in a Period:</strong></h3><p>Table: Products</p>
 <table>
@@ -394,33 +394,290 @@
 <p>There is no primary key for this table. It may have duplicate rows.<br>product_id is a foreign key to Products table.<br>unit is the number of products ordered in order_date.</p>
 <p>Write an SQL query to get the names of products with greater than or equal to 100 units ordered in February 2020 and their amount.<br>Return result table in any order.</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select product_name, sum(unit) as unit</span><br><span class="line">from Orders o</span><br><span class="line">left join Products p</span><br><span class="line">o.product_id = p.product_id</span><br><span class="line">where order_date between '2020-02-01' and '2020-02-29'</span><br><span class="line">group by product_name</span><br><span class="line">having unit &gt;= 100</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>between是两边包含的一个关系表达式</p>
 <hr>
-<h3 id="题目1398-Customers-Who-Bought-Product-A-and-B-but-Not-C"><a href="#题目1398-Customers-Who-Bought-Product-A-and-B-but-Not-C" class="headerlink" title="题目1398. Customers Who Bought Product A and B but Not C:"></a><strong>题目1398. Customers Who Bought Product A and B but Not C:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<p><strong>题目1045. Customers Who Bought All Products:</strong></p>
+<h3 id="题目1398-Customers-Who-Bought-Product-A-and-B-but-Not-C"><a href="#题目1398-Customers-Who-Bought-Product-A-and-B-but-Not-C" class="headerlink" title="题目1398. Customers Who Bought Product A and B but Not C:"></a><strong>题目1398. Customers Who Bought Product A and B but Not C:</strong></h3><p>Table: Customers</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>customer_name</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>customer_id is the primary key for this table.<br>customer_name is the name of the customer.</p>
+<p>Table: Orders</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>order_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>customer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>product_name</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>order_id is the primary key for this table.<br>customer_id is the id of the customer who bought the product “product_name”.</p>
+<p>Write an SQL query to report the customer_id and customer_name of customers who bought products “A”, “B” but did not buy the product “C” since we want to recommend them buy this product.</p>
+<p>Return the result table ordered by customer_id.</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">select * from Customers</span><br><span class="line">where customer_id in</span><br><span class="line">(select distinct customer_id from Orders</span><br><span class="line">where product_name="A")</span><br><span class="line">and</span><br><span class="line">customer_id in</span><br><span class="line">(select distinct customer_id from Orders</span><br><span class="line">where product_name="B")</span><br><span class="line">and customer_id not in</span><br><span class="line">(select distinct customer_id from Orders</span><br><span class="line">where product_name="C")</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>nested query</p>
 <hr>
-<p><strong>题目262. Trips and Users:</strong></p>
+<h3 id="题目1045-Customers-Who-Bought-All-Products"><a href="#题目1045-Customers-Who-Bought-All-Products" class="headerlink" title="题目1045. Customers Who Bought All Products:"></a><strong>题目1045. Customers Who Bought All Products:</strong></h3><p>Table: Customer</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>product_key</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>product_key is a foreign key to Product table.</p>
+<p>Table: Product</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>product_key</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>product_key is the primary key column for this table.</p>
+<p>Write an SQL query for a report that provides the customer ids from the Customer table that bought all the products in the Product table.</p>
+<p>Return the result table in any order.</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select customer_id</span><br><span class="line">from Customer c</span><br><span class="line">group by customer_id</span><br><span class="line">having count(distinct product_key) = (select count(*) from Product)</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>做题时要注意distinct是否会影响count的结果，并根据实际情况决定加或者不加</p>
 <hr>
-<p><strong>题目615. Average Salary: Departments VS Company:</strong></p>
+<h3 id="题目262-Trips-and-Users"><a href="#题目262-Trips-and-Users" class="headerlink" title="题目262. Trips and Users:"></a><strong>题目262. Trips and Users:</strong></h3><p>Table: Trips</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Client_Id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Driver_Id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>City_Id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>enum</td>
+</tr>
+<tr>
+<td>Request_at</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>Id is the primary key for this table.<br>The table holds all taxi trips. Each trip has a unique Id, while Client_Id and Driver_Id are foreign keys to the Users_Id at the Users table.<br>Status is an ENUM type of (‘completed’, ‘cancelled_by_driver’, ‘cancelled_by_client’).</p>
+<p>Table: Users</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Users_Id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Banned</td>
+<td>enum</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>enum</td>
+</tr>
+</tbody></table>
+<p>Users_Id is the primary key for this table.<br>The table holds all users. Each user has a unique Users_Id, and Role is an ENUM type of (‘client’, ‘driver’, ‘partner’).<br>Status is an ENUM type of (‘Yes’, ‘No’).</p>
+<p>Write a SQL query to find the cancellation rate of requests with unbanned users (both client and driver must not be banned) each day between “2013-10-01” and “2013-10-03”.</p>
+<p>The cancellation rate is computed by dividing the number of canceled (by client or driver) requests with unbanned users by the total number of requests with unbanned users on that day.</p>
+<p>Return the result table in any order. Round Cancellation Rate to two decimal points.</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">select Request_at as Day,</span><br><span class="line">round(sum(case when Status = 'cancelled_by_driver' or Status = 'cancelled_by_client' then 1 else 0 end)/count(*),2) as 'Cancellation Rate'</span><br><span class="line">from Trips t</span><br><span class="line">where Client_Id not in (select Users_Id from Users where Banned='Yes')</span><br><span class="line">and Driver_Id not in (select Users_Id from Users where Banned='Yes')</span><br><span class="line">and Request_at between '2013-10-01' and '2013-10-03'</span><br><span class="line">group by Request_at</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>when Status = ‘cancelled_by_driver’ or Status = ‘cancelled_by_client’<br>也可以写成 Status in (“cancelled_by_driver”,”cancelled_by_client”)</p>
+<hr>
+<h3 id="题目615-Average-Salary-Departments-VS-Company"><a href="#题目615-Average-Salary-Departments-VS-Company" class="headerlink" title="题目615. Average Salary: Departments VS Company:"></a><strong>题目615. Average Salary: Departments VS Company:</strong></h3><p>Given two tables as below, write a query to display the comparison result (higher/lower/same) of the average salary of employees in a department to the company’s average salary.</p>
+<p>Table: salary</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>employee_id</th>
+<th>amount</th>
+<th>pay_date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td>9000</td>
+<td>2017-03-31</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>6000</td>
+<td>2017-03-31</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>10000</td>
+<td>2017-03-31</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>7000</td>
+<td>2017-02-28</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>6000</td>
+<td>2017-02-28</td>
+</tr>
+<tr>
+<td>6</td>
+<td>3</td>
+<td>8000</td>
+<td>2017-02-28</td>
+</tr>
+</tbody></table>
+<p>The employee_id column refers to the employee_id in the following table employee.</p>
+<table>
+<thead>
+<tr>
+<th>employee_id</th>
+<th>department_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>So for the sample data above, the result is:</p>
+<table>
+<thead>
+<tr>
+<th>pay_month</th>
+<th>department_id</th>
+<th>comparison</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2017-03</td>
+<td>1</td>
+<td>higher</td>
+</tr>
+<tr>
+<td>2017-03</td>
+<td>2</td>
+<td>lower</td>
+</tr>
+<tr>
+<td>2017-02</td>
+<td>1</td>
+<td>same</td>
+</tr>
+<tr>
+<td>2017-02</td>
+<td>2</td>
+<td>same</td>
+</tr>
+</tbody></table>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">select distinct date_format(pay_date, '%Y-%m') as pay_month,department_id,</span><br><span class="line">(case when dept_avg&lt; company_avg then "lower"</span><br><span class="line">           when dept_avg&gt; company_avg then "higher"</span><br><span class="line">            else "same" end) as comparison</span><br><span class="line">from</span><br><span class="line">(select s.employee_id, e.department_id,pay_date,amount,</span><br><span class="line">      avg(amount) over (partition by pay_date) as company_avg ,</span><br><span class="line">      avg(amount) over (partition by pay_date,  department_id) as dept_avg</span><br><span class="line">from salary as s</span><br><span class="line">join employee as e</span><br><span class="line">on s.employee_id=e.employee_id) as tmp</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
+<ul>
+<li>case when … then … when … then … else …</li>
+<li>data_format() 改变日期格式，这里也可以使用substr(pay_data,1,7)</li>
+<li>活用窗口函数，本体为聚合函数的窗口函数</li>
+</ul>
 <hr>
+<h3 id="窗口函数"><a href="#窗口函数" class="headerlink" title="窗口函数"></a>窗口函数</h3><ol>
+<li><p>窗口函数语法</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;窗口函数&gt; over (partition by &lt;用于分组的列名&gt;</span><br><span class="line">                order by &lt;用于排序的列名&gt;)</span><br></pre></td></tr></tbody></table></figure>
+<p> &lt;窗口函数&gt;的位置，可以放以下两种函数：</p>
+<p> 1） 专用窗口函数，比如rank, dense_rank, row_number等</p>
+<p> 2） 聚合函数，如sum. avg, count, max, min等</p>
+</li>
+</ol>
+<ol start="2">
+<li><p>窗口函数有以下功能：</p>
+<p> 1）同时具有分组（partition by）和排序（order by）的功能</p>
+<p> 2）不减少原表的行数，所以经常用来在每组内排名</p>
+</li>
+<li><p>注意事项</p>
+<p> 窗口函数原则上只能写在select子句中</p>
+</li>
+<li><p>窗口函数使用场景</p>
+<p> 1）业务需求“在每组内排名”，比如：</p>
+<p> 排名问题：每个部门按业绩来排名<br> topN问题：找出每个部门排名前N的员工进行奖励</p>
+</li>
+</ol>
 </body></html>
     
     </div>
