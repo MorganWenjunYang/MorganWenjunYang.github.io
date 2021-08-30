@@ -78,7 +78,7 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            <a href="/2021/08/26/leetcode-sql-3/" itemprop="url">Leetcode上的SQL题（Part 2）</a>
+            <a href="/2021/08/26/leetcode-sql-3/" itemprop="url">Leetcode上的SQL题（Part 3）</a>
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -129,13 +129,36 @@
         <span class="column is-narrow">
             
             
-            a few seconds read (About 99 words)
+            16 minutes read (About 2337 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><h3 id="题目601-Human-Traffic-of-Stadium"><a href="#题目601-Human-Traffic-of-Stadium" class="headerlink" title="题目601. Human Traffic of Stadium:"></a><strong>题目601. Human Traffic of Stadium:</strong></h3></body></html>
+        <html><head></head><body><h3 id="题目601-Human-Traffic-of-Stadium"><a href="#题目601-Human-Traffic-of-Stadium" class="headerlink" title="题目601. Human Traffic of Stadium:"></a><strong>题目601. Human Traffic of Stadium:</strong></h3><p>Table: Stadium</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>visit_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>people</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>visit_date is the primary key for this table.<br>Each row of this table contains the visit date and visit id to the stadium with the number of people during the visit.<br>No two rows will have the same visit_date, and as the id increases, the dates increase as well.</p>
+<p>Write an SQL query to display the records with three or more rows with consecutive id’s, and the number of people is greater than or equal to 100 for each.</p>
+<p>Return the result table ordered by visit_date in ascending order.</p></body></html>
         <p class="article-more-link">
             <a href="/2021/08/25/leetcode-sql-2/#more">Read More</a>
         </p>

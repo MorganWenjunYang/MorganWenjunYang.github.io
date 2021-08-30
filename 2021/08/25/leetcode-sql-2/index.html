@@ -84,69 +84,639 @@
         <span class="column is-narrow">
             
             
-            a few seconds read (About 99 words)
+            16 minutes read (About 2337 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><h3 id="题目601-Human-Traffic-of-Stadium"><a href="#题目601-Human-Traffic-of-Stadium" class="headerlink" title="题目601. Human Traffic of Stadium:"></a><strong>题目601. Human Traffic of Stadium:</strong></h3><span id="more"></span>
+        <html><head></head><body><h3 id="题目601-Human-Traffic-of-Stadium"><a href="#题目601-Human-Traffic-of-Stadium" class="headerlink" title="题目601. Human Traffic of Stadium:"></a><strong>题目601. Human Traffic of Stadium:</strong></h3><p>Table: Stadium</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>visit_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>people</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>visit_date is the primary key for this table.<br>Each row of this table contains the visit date and visit id to the stadium with the number of people during the visit.<br>No two rows will have the same visit_date, and as the id increases, the dates increase as well.</p>
+<p>Write an SQL query to display the records with three or more rows with consecutive id’s, and the number of people is greater than or equal to 100 for each.</p>
+<p>Return the result table ordered by visit_date in ascending order.</p>
+<span id="more"></span>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">select distinct a.*</span><br><span class="line">from stadium a</span><br><span class="line">join stadium b</span><br><span class="line">join stadium c</span><br><span class="line">on (c.id-b.id=1 and b.id-a.id=1)</span><br><span class="line">or (a.id-b.id=1 and b.id-c.id=1)</span><br><span class="line">or (b.id-a.id=1 and b.id-c.id=2)</span><br><span class="line">where a.people&gt;=100</span><br><span class="line">and b.people&gt;=100</span><br><span class="line">and c.people&gt;=100</span><br><span class="line">order by a.id</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">select id,visit_date,people</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select id, visit_date, people ,count(*)  over(partition by gp) as cnt</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select *, id-flg as gp</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select *, dense_rank() over(order by id) as flg</span><br><span class="line">from stadium</span><br><span class="line">where people&gt;=100</span><br><span class="line">) t1</span><br><span class="line">) t2</span><br><span class="line">) t3</span><br><span class="line">where cnt&gt;=3</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>后一种做法可以适用于任何连续时长</p>
+<hr>
+<h3 id="题目603-Consecutive-Available-Seats"><a href="#题目603-Consecutive-Available-Seats" class="headerlink" title="题目603. Consecutive Available Seats:"></a><strong>题目603. Consecutive Available Seats:</strong></h3><p>Several friends at a cinema ticket office would like to reserve consecutive available seats.<br>Can you help to query all the consecutive available seats order by the seat_id using the following cinema table?</p>
+<table>
+<thead>
+<tr>
+<th>seat_id</th>
+<th>free</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>Your query should return the following result for the sample case above.</p>
+<table>
+<thead>
+<tr>
+<th>seat_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+</tr>
+</tbody></table>
+<p>Note:<br>The seat_id is an auto increment int, and free is bool (‘1’ means free, and ‘0’ means occupied.).<br>Consecutive available seats are more than 2(inclusive) seats consecutively available.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select c1.seat_id</span><br><span class="line">from cinema c1</span><br><span class="line">left join cinema c2</span><br><span class="line">on c1.seat_id+1=c2.seat_id</span><br><span class="line">left join cinema c3</span><br><span class="line">on c1.seat_id-1=c3.seat_id</span><br><span class="line">where c1.free=1 and (c2.free=1 or c3.free=1)</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">select seat_id</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select seat_id, count(*) over(partition by gp)  as cnt</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select * , seat_id-flg as gp</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select *, dense_rank() over(order by seat_id) as flg</span><br><span class="line">from cinema</span><br><span class="line">where free=1</span><br><span class="line">)t</span><br><span class="line">)t2</span><br><span class="line">)t3</span><br><span class="line">where cnt&gt;=2</span><br></pre></td></tr></tbody></table></figure>
+<p><strong>Insights:</strong><br>后一种做法可以适用于任何连续时长</p>
+<hr>
+<h3 id="题目1127-User-Purchase-Platform"><a href="#题目1127-User-Purchase-Platform" class="headerlink" title="题目1127. User Purchase Platform:"></a><strong>题目1127. User Purchase Platform:</strong></h3><p>Table: Spending</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>spend_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>enum</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>The table logs the spendings history of users that make purchases from an online shopping website which has a desktop and a mobile application.<br>(user_id, spend_date, platform) is the primary key of this table.<br>The platform column is an ENUM type of (‘desktop’, ‘mobile’).<br>Write an SQL query to find the total number of users and the total amount spent using mobile only, desktop only and both mobile and desktop together for each date.</p>
+<p>The query result format is in the following example:</p>
+<p>Spending table:</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>spend_date</th>
+<th>platform</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>2019-07-01</td>
+<td>mobile</td>
+<td>100</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2019-07-01</td>
+<td>desktop</td>
+<td>100</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2019-07-01</td>
+<td>mobile</td>
+<td>100</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2019-07-02</td>
+<td>mobile</td>
+<td>100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2019-07-01</td>
+<td>desktop</td>
+<td>100</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2019-07-02</td>
+<td>desktop</td>
+<td>100</td>
+</tr>
+</tbody></table>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>spend_date</th>
+<th>platform</th>
+<th>total_amount</th>
+<th>total_users</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019-07-01</td>
+<td>desktop</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019-07-01</td>
+<td>mobile</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019-07-01</td>
+<td>both</td>
+<td>200</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019-07-02</td>
+<td>desktop</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019-07-02</td>
+<td>mobile</td>
+<td>100</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019-07-02</td>
+<td>both</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>On 2019-07-01, user 1 purchased using both desktop and mobile, user 2 purchased using mobile only and user 3 purchased using desktop only.<br>On 2019-07-02, user 2 purchased using mobile only, user 3 purchased using desktop only and no one purchased using both platforms.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">    p.spend_date,</span><br><span class="line">    p.platform,</span><br><span class="line">    IFNULL(SUM(amount), 0) total_amount,</span><br><span class="line">    COUNT(user_id) total_users</span><br><span class="line">FROM</span><br><span class="line">(</span><br><span class="line">    SELECT DISTINCT(spend_date), 'desktop' platform FROM Spending</span><br><span class="line">    UNION</span><br><span class="line">    SELECT DISTINCT(spend_date), 'mobile' platform FROM Spending</span><br><span class="line">    UNION</span><br><span class="line">    SELECT DISTINCT(spend_date), 'both' platform FROM Spending</span><br><span class="line">) p</span><br><span class="line">LEFT JOIN (</span><br><span class="line">    SELECT</span><br><span class="line">        spend_date,</span><br><span class="line">        user_id,</span><br><span class="line">        IF(mobile_amount &gt; 0, IF(desktop_amount &gt; 0, 'both', 'mobile'), 'desktop') platform,</span><br><span class="line">        (mobile_amount + desktop_amount) amount</span><br><span class="line">    FROM (</span><br><span class="line">        SELECT</span><br><span class="line">          spend_date,</span><br><span class="line">          user_id,</span><br><span class="line">          SUM(CASE platform WHEN 'mobile' THEN amount ELSE 0 END) mobile_amount,</span><br><span class="line">          SUM(CASE platform WHEN 'desktop' THEN amount ELSE 0 END) desktop_amount</span><br><span class="line">###  将竖形数据改成横型数据</span><br><span class="line">        FROM Spending</span><br><span class="line">        GROUP BY spend_date, user_id</span><br><span class="line">    ) o</span><br><span class="line">) t</span><br><span class="line">ON p.platform=t.platform AND p.spend_date=t.spend_date</span><br><span class="line">GROUP BY spend_date, platform</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<ul>
+<li>用case when将竖向数据改成横向数据</li>
+<li>两个union的subquery避免有因为数据为0而消失的行</li>
+</ul>
+<hr>
+<h3 id="题目597-Friend-Request-I-Overall-Acceptance-Rate"><a href="#题目597-Friend-Request-I-Overall-Acceptance-Rate" class="headerlink" title="题目597. Friend Request I: Overall Acceptance Rate:"></a><strong>题目597. Friend Request I: Overall Acceptance Rate:</strong></h3><p>Table: FriendRequest</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sender_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>send_to_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>request_date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table, it may contain duplicates.<br>This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date of the request.</p>
+<p>Table: RequestAccepted</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>requester_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>accepter_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>accept_date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table, it may contain duplicates.<br>This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date when the request was accepted.</p>
+<p>Write an SQL query to find the overall acceptance rate of requests, which is the number of acceptance divided by the number of requests. Return the answer rounded to 2 decimals places.</p>
+<p>Note that:<br>The accepted requests are not necessarily from the table friend_request. In this case, you just need to simply count the total accepted requests (no matter whether they are in the original requests), and divide it by the number of requests to get the acceptance rate.<br>It is possible that a sender sends multiple requests to the same receiver, and a request could be accepted more than once. In this case, the ‘duplicated’ requests or acceptances are only counted once.<br>If there are no requests at all, you should return 0.00 as the accept_rate.</p>
+<p>Follow up:</p>
+<ul>
+<li>Could you write a query to return the acceptance rate for every month?</li>
+<li>Could you write a query to return the cumulative acceptance rate for every day?</li>
+</ul>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">round(ifnull((select count(distinct requester_id, accepter_id) from request_accepted)/</span><br><span class="line">(select count(distinct sender_id, send_to_id) from friend_request),0),2 )as accept_rate</span><br></pre></td></tr></tbody></table></figure>
+<p>Follow-Up 1:</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select if(d.req =0, 0.00, round(c.acp/d.req,2)) as accept_rate, c.month from</span><br><span class="line">(select count(distinct requester_id, accepter_id) as acp, Month(accept_date) as month from request_accepted) c,</span><br><span class="line">(select count(distinct sender_id, send_to_id) as req, Month(request_date) as month from friend_request) d</span><br><span class="line">where c.month = d.month</span><br><span class="line">group by c.month</span><br></pre></td></tr></tbody></table></figure>
+<p>Follow-Up 2:</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">## sum up the case when ind is 'a', which means it belongs to accept table, divided by sum of ind is 'r', which means it belong to request table</span><br><span class="line">select s.date1, ifnull(round(sum(case when t.ind = 'a' then t.cnt else 0 end)/sum(case when t.ind = 'r' then t.cnt else 0 end),2),0)</span><br><span class="line">from</span><br><span class="line">## get a table of all unique dates</span><br><span class="line">(select distinct x.request_date as date1 from friend_request x</span><br><span class="line">## The reason here use union sicne we don't want duplicate date</span><br><span class="line">union</span><br><span class="line"> select distinct y.accept_date as date1 from request_accepted y</span><br><span class="line">) s</span><br><span class="line">## left join to make sure all dates are in the final output</span><br><span class="line">left join</span><br><span class="line">## get a table of all dates, count of each days, ind to indicate which table it comes from</span><br><span class="line">(select v.request_date as date1, count(*) as cnt,'r' as ind from friend_request v group by v.request_date</span><br><span class="line">## The reason here use union all sicne union all will be faster</span><br><span class="line">union all</span><br><span class="line">select w.accept_date as date1, count(*) as cnt,'a' as ind from request_accepted w group by w.accept_date) t</span><br><span class="line">## s.date1 &gt;= t.date1, which for each reacord in s, it will join with all records earlier than it in t</span><br><span class="line">on s.date1 &gt;= t.date1</span><br><span class="line"># group by s.date1 then we can get a cumulative result to that day</span><br><span class="line">group by s.date1</span><br><span class="line">order by s.date1</span><br><span class="line">;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<ul>
+<li>distinct xx,xx</li>
+<li>IFNULL的用法</li>
+<li>Cartesian product</li>
+<li>union all is faster than union 因为不需要去重</li>
+<li>on后面接不等式 -&gt; 来计算cumulative -&gt; 效率较低 -&gt; 考虑用窗口函数代替</li>
+</ul>
+<hr>
+<h3 id="题目1083-Sales-Analysis-II"><a href="#题目1083-Sales-Analysis-II" class="headerlink" title="题目1083. Sales Analysis II:"></a><strong>题目1083. Sales Analysis II:</strong></h3><p>table: Product</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>product_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>product_name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>unit_price</td>
+<td>int</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>product_id is the primary key of this table.</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Table: Sales</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>seller_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>product_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>buyer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>sale_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>int</td>
+</tr>
+<tr>
+<td>price</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>This table has no primary key, it can have repeated rows.<br>product_id is a foreign key to Product table.</p>
+<p>Write an SQL query that reports the buyers who have bought S8 but not iPhone. Note that S8 and iPhone are products present in the Product table.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select buyer_id</span><br><span class="line">from Sales s</span><br><span class="line">join Product p</span><br><span class="line">on s.product_id=p.product_id</span><br><span class="line">group by buyer_id</span><br><span class="line">having sum(case product_name when "S8" then 1 else 0 end)&gt;0</span><br><span class="line">and sum(case product_name when "iPhone" then 1 else 0 end)=0</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<hr>
+<h3 id="题目1479-Sales-by-Day-of-the-Week"><a href="#题目1479-Sales-by-Day-of-the-Week" class="headerlink" title="题目1479. Sales by Day of the Week:"></a><strong>题目1479. Sales by Day of the Week:</strong></h3><p>Table: Orders</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>order_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>customer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>order_date</td>
+<td>date</td>
+</tr>
+<tr>
+<td>item_id</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>(ordered_id, item_id) is the primary key for this table.<br>This table contains information of the orders placed.<br>order_date is the date when item_id was ordered by the customer with id customer_id.</p>
+<p>Table: Items</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>item_id</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>item_name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>item_category</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>item_id is the primary key for this table.<br>item_name is the name of the item.<br>item_category is the category of the item.</p>
+<p>You are the business owner and would like to obtain a sales report for category items and day of the week.</p>
+<p>Write an SQL query to report how many units in each category have been ordered on each day of the week.</p>
+<p>Return the result table ordered by category.</p>
 <p><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
 <hr>
-<h3 id="题目601-Human-Traffic-of-Stadium-1"><a href="#题目601-Human-Traffic-of-Stadium-1" class="headerlink" title="题目601. Human Traffic of Stadium:"></a><strong>题目601. Human Traffic of Stadium:</strong></h3><p><strong>Answer:</strong></p>
+<h3 id="题目1321-Restaurant-Growth"><a href="#题目1321-Restaurant-Growth" class="headerlink" title="题目1321. Restaurant Growth:"></a><strong>题目1321. Restaurant Growth:</strong></h3><p>Table: Customer</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>visited_on</td>
+<td>date</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>(customer_id, visited_on) is the primary key for this table.<br>This table contains data about customer transactions in a restaurant.<br>visited_on is the date on which the customer with ID (customer_id) have visited the restaurant.<br>amount is the total paid by a customer.</p>
+<p>You are the restaurant owner and you want to analyze a possible expansion (there will be at least one customer every day).</p>
+<p>Write an SQL query to compute moving average of how much customer paid in a 7 days window (current day + 6 days before) .</p>
+<p>The query result format is in the following example:</p>
+<p>Return result table ordered by visited_on.</p>
+<p>average_amount should be rounded to 2 decimal places, all dates are in the format (‘YYYY-MM-DD’).</p>
+<p><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
 <hr>
-<h3 id="题目603-Consecutive-Available-Seats"><a href="#题目603-Consecutive-Available-Seats" class="headerlink" title="题目603. Consecutive Available Seats:"></a><strong>题目603. Consecutive Available Seats:</strong></h3><p><strong>Answer:</strong></p>
+<h3 id="题目1164-Product-Price-at-a-Given-Date"><a href="#题目1164-Product-Price-at-a-Given-Date" class="headerlink" title="题目1164. Product Price at a Given Date:"></a><strong>题目1164. Product Price at a Given Date:</strong></h3><p>Table: Products</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>product_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>new_price</td>
+<td>int</td>
+</tr>
+<tr>
+<td>change_date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>(product_id, change_date) is the primary key of this table.<br>Each row of this table indicates that the price of some product was changed to a new price at some date.</p>
+<p>Write an SQL query to find the prices of all products on 2019-08-16. Assume the price of all products before any change is 10.</p>
+<p><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
 <hr>
-<h3 id="题目1127-User-Purchase-Platform"><a href="#题目1127-User-Purchase-Platform" class="headerlink" title="题目1127. User Purchase Platform:"></a><strong>题目1127. User Purchase Platform:</strong></h3><p><strong>Answer:</strong></p>
+<h3 id="题目1135-Create-a-Seesion-Bar-Chart"><a href="#题目1135-Create-a-Seesion-Bar-Chart" class="headerlink" title="题目1135. Create a Seesion Bar Chart:"></a><strong>题目1135. Create a Seesion Bar Chart:</strong></h3><p>Table: Sessions</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>session_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>session_id is the primary key for this table.<br>duration is the time in seconds that a user has visited the application.</p>
+<p>You want to know how long a user visits your application. You decided to create bins of “[0-5&gt;”, “[5-10&gt;”, “[10-15&gt;” and “15 minutes or more” and count the number of sessions on it.</p>
+<p>Write an SQL query to report the (bin, total) in any order.</p>
+<p>The query result format is in the following example.</p>
+<p>Sessions table:</p>
+<table>
+<thead>
+<tr>
+<th>session_id</th>
+<th>duration</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>30</td>
+</tr>
+<tr>
+<td>2</td>
+<td>199</td>
+</tr>
+<tr>
+<td>3</td>
+<td>299</td>
+</tr>
+<tr>
+<td>4</td>
+<td>580</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1000</td>
+</tr>
+</tbody></table>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>bin</th>
+<th>total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[0-5&gt;</td>
+<td>3</td>
+</tr>
+<tr>
+<td>[5-10&gt;</td>
+<td>1</td>
+</tr>
+<tr>
+<td>[10-15&gt;</td>
+<td>0</td>
+</tr>
+<tr>
+<td>15 or more</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>For session_id 1, 2 and 3 have a duration greater or equal than 0 minutes and less than 5 minutes.<br>For session_id 4 has a duration greater or equal than 5 minutes and less than 10 minutes.<br>There are no session with a duration greater or equial than 10 minutes and less than 15 minutes.<br>For session_id 5 has a duration greater or equal than 15 minutes.<br><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
 <hr>
-<h3 id="题目597-Friend-Request-I-Overall-Acceptance-Rate"><a href="#题目597-Friend-Request-I-Overall-Acceptance-Rate" class="headerlink" title="题目597. Friend Request I: Overall Acceptance Rate:"></a><strong>题目597. Friend Request I: Overall Acceptance Rate:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="题目1517-Find-Users-With-Valid-E-mails"><a href="#题目1517-Find-Users-With-Valid-E-mails" class="headerlink" title="题目1517. Find Users With Valid E-mails:"></a><strong>题目1517. Find Users With Valid E-mails:</strong></h3><p>Table: Users</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>user_id is the primary key for this table.<br>This table contains information of the users signed up in a website. Some e-mails are invalid.</p>
+<p>Write an SQL query to find the users who have valid emails.</p>
+<p>A valid e-mail has a prefix name and a domain where:<br>The prefix name is a string that may contain letters (upper or lower case), digits, underscore ‘_’, period ‘.’ and/or dash ‘-‘. The prefix name must start with a letter.<br>The domain is ‘@leetcode.com’.<br>Return the result table in any order.</p>
+<p>The query result format is in the following example.</p>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select*</span><br><span class="line">from Users</span><br><span class="line">where mail REGEXP '^[a-zA-Z][a-zA-Z0-9_.-]+@leetcode.com'</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
+<ul>
+<li>REGEXP ‘xxx’ 正则表达式</li>
+</ul>
 <hr>
-<h3 id="题目1083-Sales-Analysis-II"><a href="#题目1083-Sales-Analysis-II" class="headerlink" title="题目1083. Sales Analysis II:"></a><strong>题目1083. Sales Analysis II:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1479-Sales-by-Day-of-the-Week"><a href="#题目1479-Sales-by-Day-of-the-Week" class="headerlink" title="题目1479. Sales by Day of the Week:"></a><strong>题目1479. Sales by Day of the Week:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1321-Restaurant-Growth"><a href="#题目1321-Restaurant-Growth" class="headerlink" title="题目1321. Restaurant Growth:"></a><strong>题目1321. Restaurant Growth:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1164-Product-Price-at-a-Given-Date"><a href="#题目1164-Product-Price-at-a-Given-Date" class="headerlink" title="题目1164. Product Price at a Given Date:"></a><strong>题目1164. Product Price at a Given Date:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1135-Create-a-Seesion-Bar-Chart"><a href="#题目1135-Create-a-Seesion-Bar-Chart" class="headerlink" title="题目1135. Create a Seesion Bar Chart:"></a><strong>题目1135. Create a Seesion Bar Chart:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1517-Find-Users-With-Valid-E-mails"><a href="#题目1517-Find-Users-With-Valid-E-mails" class="headerlink" title="题目1517. Find Users With Valid E-mails:"></a><strong>题目1517. Find Users With Valid E-mails:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1454-Active-Users"><a href="#题目1454-Active-Users" class="headerlink" title="题目1454. Active Users:"></a><strong>题目1454. Active Users:</strong></h3><p><strong>Answer:</strong></p>
+<h3 id="题目1454-Active-Users"><a href="#题目1454-Active-Users" class="headerlink" title="题目1454. Active Users:"></a><strong>题目1454. Active Users:</strong></h3><p>Table Accounts:</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>the id is the primary key for this table.<br>This table contains the account id and the user name of each account.</p>
+<p>Table Logins:</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>login_date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table, it may contain duplicates.<br>This table contains the account id of the user who logged in and the login date. A user may log in multiple times in the day.</p>
+<p>Write an SQL query to find the id and the name of active users.</p>
+<p>Active users are those who logged in to their accounts for 5 or more consecutive days.</p>
+<p>Return the result table ordered by the id.<br><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
@@ -165,7 +735,7 @@
     <div class="columns is-mobile is-multiline article-nav">
         <span class="column is-12-mobile is-half-desktop  article-nav-prev">
             
-            <a href="/2021/08/26/leetcode-sql-3/">Leetcode上的SQL题（Part 2）</a>
+            <a href="/2021/08/26/leetcode-sql-3/">Leetcode上的SQL题（Part 3）</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
