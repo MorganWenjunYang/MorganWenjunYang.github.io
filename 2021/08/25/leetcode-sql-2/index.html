@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            16 minutes read (About 2337 words)
+            21 minutes read (About 3179 words)
         </span>
         
     </div>
@@ -497,9 +497,9 @@
 <p>Write an SQL query to report how many units in each category have been ordered on each day of the week.</p>
 <p>Return the result table ordered by category.</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">select item_category as Category,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=0 then 1 else 0 end)*quantity),0) as Monday,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=1 then 1 else 0 end)*quantity),0) as Tuesday,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=2 then 1 else 0 end)*quantity),0) as Wednesday,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=3 then 1 else 0 end)*quantity),0) as Thursday,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=4 then 1 else 0 end)*quantity),0) as Friday,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=5 then 1 else 0 end)*quantity),0) as Saturday,</span><br><span class="line">ifnull(sum((case when weekday(order_date)=6 then 1 else 0 end)*quantity),0) as Sunday</span><br><span class="line">from Items i</span><br><span class="line">left join Orders o</span><br><span class="line">on o.item_id=i.item_id</span><br><span class="line">group by Category</span><br><span class="line">order by Category</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>注意ifnull</p>
 <hr>
 <h3 id="题目1321-Restaurant-Growth"><a href="#题目1321-Restaurant-Growth" class="headerlink" title="题目1321. Restaurant Growth:"></a><strong>题目1321. Restaurant Growth:</strong></h3><p>Table: Customer</p>
 <table>
@@ -532,10 +532,123 @@
 <p>The query result format is in the following example:</p>
 <p>Return result table ordered by visited_on.</p>
 <p>average_amount should be rounded to 2 decimal places, all dates are in the format (‘YYYY-MM-DD’).</p>
+<p>Customer table:</p>
+<table>
+<thead>
+<tr>
+<th>customer_id</th>
+<th>name</th>
+<th>visited_on</th>
+<th>amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Jhon</td>
+<td>2019-01-01</td>
+<td>100</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Daniel</td>
+<td>2019-01-02</td>
+<td>110</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Jade</td>
+<td>2019-01-03</td>
+<td>120</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Khaled</td>
+<td>2019-01-04</td>
+<td>130</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Winston</td>
+<td>2019-01-05</td>
+<td>110</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Elvis</td>
+<td>2019-01-06</td>
+<td>140</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Anna</td>
+<td>2019-01-07</td>
+<td>150</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Maria</td>
+<td>2019-01-08</td>
+<td>80</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Jaze</td>
+<td>2019-01-09</td>
+<td>110</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Jhon</td>
+<td>2019-01-10</td>
+<td>130</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Jade</td>
+<td>2019-01-10</td>
+<td>150</td>
+</tr>
+</tbody></table>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>visited_on</th>
+<th>amount</th>
+<th>average_amount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019-01-07</td>
+<td>860</td>
+<td>122.86</td>
+</tr>
+<tr>
+<td>2019-01-08</td>
+<td>840</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2019-01-09</td>
+<td>840</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2019-01-10</td>
+<td>1000</td>
+<td>142.86</td>
+</tr>
+</tbody></table>
+<p>1st moving average from 2019-01-01 to 2019-01-07 has an average_amount of (100 + 110 + 120 + 130 + 110 + 140 + 150)/7 = 122.86<br>2nd moving average from 2019-01-02 to 2019-01-08 has an average_amount of (110 + 120 + 130 + 110 + 140 + 150 + 80)/7 = 120<br>3rd moving average from 2019-01-03 to 2019-01-09 has an average_amount of (120 + 130 + 110 + 140 + 150 + 80 + 110)/7 = 120<br>4th moving average from 2019-01-04 to 2019-01-10 has an average_amount of (130 + 110 + 140 + 150 + 80 + 110 + 130 + 150)/7 = 142.86</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select c1.visited_on, sum(c2.day_sum) as amount, round(avg(c2.day_sum),2) as average_amount</span><br><span class="line">from</span><br><span class="line">(select visited_on, sum(amount) as day_sum from Customer group by visited_on) c1,</span><br><span class="line">(select visited_on, sum(amount) as day_sum from Customer group by visited_on) c2</span><br><span class="line">where datediff(c1.visited_on,c2.visited_on) between 0 and 6</span><br><span class="line">group by c1.visited_on</span><br><span class="line">having count(c2.visited_on)=7</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
+<ul>
+<li>datadiff前一个参数比后一个参数在日期上更早</li>
+<li>between 0 and 6 是大于等于0并小于等于6</li>
+<li>因为这里要left join，所以必须先算出每日的sum，否则c1.visited_on可能会有不止七个c2.visit_on</li>
+</ul>
 <hr>
 <h3 id="题目1164-Product-Price-at-a-Given-Date"><a href="#题目1164-Product-Price-at-a-Given-Date" class="headerlink" title="题目1164. Product Price at a Given Date:"></a><strong>题目1164. Product Price at a Given Date:</strong></h3><p>Table: Products</p>
 <table>
@@ -561,9 +674,15 @@
 <p>(product_id, change_date) is the primary key of this table.<br>Each row of this table indicates that the price of some product was changed to a new price at some date.</p>
 <p>Write an SQL query to find the prices of all products on 2019-08-16. Assume the price of all products before any change is 10.</p>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT distinct a.product_id,ifnull(temp.new_price,10) as price</span><br><span class="line">FROM products as a</span><br><span class="line">LEFT JOIN</span><br><span class="line">(SELECT *</span><br><span class="line">FROM products</span><br><span class="line">WHERE (product_id, change_date) in (select product_id,max(change_date) from products where change_date&lt;="2019-08-16" group by product_id)) as temp</span><br><span class="line"># 同时 in 两个column</span><br><span class="line">on a.product_id = temp.product_id;</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">select t1.product_id, ifnull(new_price, 10) as price</span><br><span class="line">from</span><br><span class="line">(select distinct product_id from Products) t1</span><br><span class="line">left join</span><br><span class="line">(select * from</span><br><span class="line">(select *, rank() over(partition by product_id order by change_date desc) as myrank</span><br><span class="line">from Products p</span><br><span class="line">where change_date &lt;= '2019-08-16'</span><br><span class="line">)test</span><br><span class="line">where myrank=1)t2</span><br><span class="line">on t1.product_id=t2.product_id</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
+<ul>
+<li>(xx,yy) in (zz,mm) 可以同时in多个变量</li>
+<li>两种方法中的select distinct + left join都避免因为null而漏行</li>
+</ul>
 <hr>
 <h3 id="题目1135-Create-a-Seesion-Bar-Chart"><a href="#题目1135-Create-a-Seesion-Bar-Chart" class="headerlink" title="题目1135. Create a Seesion Bar Chart:"></a><strong>题目1135. Create a Seesion Bar Chart:</strong></h3><p>Table: Sessions</p>
 <table>
@@ -641,9 +760,11 @@
 </tr>
 </tbody></table>
 <p>For session_id 1, 2 and 3 have a duration greater or equal than 0 minutes and less than 5 minutes.<br>For session_id 4 has a duration greater or equal than 5 minutes and less than 10 minutes.<br>There are no session with a duration greater or equial than 10 minutes and less than 15 minutes.<br>For session_id 5 has a duration greater or equal than 15 minutes.<br><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT '[0-5&gt;' AS bin, SUM(CASE WHEN duration &gt;= 0 AND duration &lt; 300 THEN 1 ELSE 0 END) AS total FROM Sessions UNION</span><br><span class="line">SELECT '[5-10&gt;' AS bin, SUM(CASE WHEN duration &gt;= 300 AND duration &lt; 600 THEN 1 ELSE 0 END) AS total FROM Sessions  UNION</span><br><span class="line">SELECT '[10-15&gt;' AS bin, SUM(CASE WHEN duration &gt;= 600 AND duration &lt; 900 THEN 1 ELSE 0 END) AS total FROM Sessions UNION</span><br><span class="line">SELECT '15 or more' AS bin, SUM(CASE WHEN duration &gt;= 900 THEN 1 ELSE 0 END) AS total FROM Sessions</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">select T1.BIN,ifnull(total,0) as TOTAL from</span><br><span class="line">(</span><br><span class="line">    SELECT "[0-5&gt;"        AS BIN</span><br><span class="line">    UNION</span><br><span class="line">    SELECT "[5-10&gt;"       AS BIN</span><br><span class="line">    UNION</span><br><span class="line">    SELECT "[10-15&gt;"      AS BIN</span><br><span class="line">    UNION</span><br><span class="line">    SELECT "15 or more"   AS BIN</span><br><span class="line">) T1</span><br><span class="line">left join</span><br><span class="line">(select (case when duration/60&lt;5 then "[0-5&gt;"</span><br><span class="line">when duration/60 &lt;10 then "[5-10&gt;"</span><br><span class="line">when duration/60 &lt;15 then "[10-15&gt;"</span><br><span class="line">else "15 or more" end) as bin,</span><br><span class="line">count(*) as total</span><br><span class="line">from Sessions</span><br><span class="line">group by bin) T2</span><br><span class="line">on T1.BIN=T2.bin</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>case when … then … when … then … end</p>
 <hr>
 <h3 id="题目1517-Find-Users-With-Valid-E-mails"><a href="#题目1517-Find-Users-With-Valid-E-mails" class="headerlink" title="题目1517. Find Users With Valid E-mails:"></a><strong>题目1517. Find Users With Valid E-mails:</strong></h3><p>Table: Users</p>
 <table>
@@ -717,10 +838,20 @@
 <p>Write an SQL query to find the id and the name of active users.</p>
 <p>Active users are those who logged in to their accounts for 5 or more consecutive days.</p>
 <p>Return the result table ordered by the id.<br><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># select distinct l1.id, (select name from Accounts where id=l1.id) as name</span><br><span class="line"># from Logins l1</span><br><span class="line"># join Logins l2</span><br><span class="line"># on l1.id=l2.id</span><br><span class="line"># and datediff(l2.login_date,l1.login_date) between 1 and 4</span><br><span class="line"># group by l1.id,l1.login_date</span><br><span class="line"># having count(distinct l2.login_date)=4</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># Write your MySQL query statement below</span><br><span class="line">select id,login_date</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select *, count(*) over(partition by id,flg) as cnt</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select id, name,  login_date,date_sub(login_date, INTERVAL dt DAY) as flg</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select l.id, login_date, name, dense_rank() over(partition by l.id order by login_date) as dt</span><br><span class="line">from (select distinct * from Logins) l</span><br><span class="line">left join</span><br><span class="line">Accounts a</span><br><span class="line">on a.id=l.id</span><br><span class="line">)t1</span><br><span class="line">)t2</span><br><span class="line">)t3</span><br><span class="line">where cnt&gt;=5</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">select distinct id, name</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select id, count(1) as cnt, name, date_sub(login_date, INTERVAL dt DAY) as flg</span><br><span class="line">from</span><br><span class="line">(select l.id, login_date, name, dense_rank() over(partition by l.id order by login_date) as dt</span><br><span class="line">from (select distinct * from Logins) l</span><br><span class="line">left join</span><br><span class="line">Accounts a</span><br><span class="line">on a.id=l.id</span><br><span class="line">)t1</span><br><span class="line">group by id, date_sub(login_date, INTERVAL dt DAY)</span><br><span class="line">)test</span><br><span class="line">where cnt&gt;=5</span><br></pre></td></tr></tbody></table></figure>
 
-<p><strong>Insights:</strong></p>
+<p><strong>Insights:</strong><br>也是求连续时间的老套路了</p>
 <hr>
+<h3 id="连续时间问题"><a href="#连续时间问题" class="headerlink" title="连续时间问题"></a><strong>连续时间问题</strong></h3><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/349358841">https://zhuanlan.zhihu.com/p/349358841</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jiaxinwei/p/13936273.html">https://www.cnblogs.com/jiaxinwei/p/13936273.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdhttp//www.itongji.cn/detail?type=99993198n.net/ganghaodream/article/details/100083543">https://blog.csdhttp://www.itongji.cn/detail?type=99993198n.net/ganghaodream/article/details/100083543</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.itongji.cn/detail?type=99993198">http://www.itongji.cn/detail?type=99993198</a></li>
+</ul>
 </body></html>
     
     </div>
@@ -728,6 +859,8 @@
     <div class="columns is-variable is-1 is-multiline is-mobile">
     
         <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Leetcode/">#Leetcode</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/SQL/">#SQL</a></span>
     
     </div>
     

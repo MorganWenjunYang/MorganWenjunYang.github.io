@@ -84,71 +84,699 @@
         <span class="column is-narrow">
             
             
-            a few seconds read (About 98 words)
+            18 minutes read (About 2669 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><h3 id="题目619-Biggest-Single-Number"><a href="#题目619-Biggest-Single-Number" class="headerlink" title="题目619. Biggest Single Number:"></a><strong>题目619. Biggest Single Number:</strong></h3><span id="more"></span>
+        <html><head></head><body><h3 id="题目619-Biggest-Single-Number"><a href="#题目619-Biggest-Single-Number" class="headerlink" title="题目619. Biggest Single Number:"></a><strong>题目619. Biggest Single Number:</strong></h3><p>Table my_numbers contains many numbers in column num including duplicated ones.<br>Can you write a SQL query to find the biggest number, which only appears once.</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8</td>
+</tr>
+<tr>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+</tr>
+<tr>
+<td>6</td>
+</tr>
+<tr>
+<td>For the sample data above, your query should return the following result:</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>num</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>6</td>
+</tr>
+<tr>
+<td>Note:</td>
+</tr>
+<tr>
+<td>If there is no such number, just output null.</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
 <p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select max(num)</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select num</span><br><span class="line">from my_numbers</span><br><span class="line">group by num</span><br><span class="line">having count(*)=1</span><br><span class="line">)t</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select (</span><br><span class="line">select num</span><br><span class="line">from my_numbers</span><br><span class="line">group by num</span><br><span class="line">having count(*)=1</span><br><span class="line">order by num desc</span><br><span class="line">limit 1</span><br><span class="line">) as num</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>在方法二中，外面套一层select 会把[]变成[nulls]</p>
+<hr>
+<h3 id="题目1555-Bank-Account-Summary"><a href="#题目1555-Bank-Account-Summary" class="headerlink" title="题目1555. Bank Account Summary:"></a><strong>题目1555. Bank Account Summary:</strong></h3><p>Table: Users</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>user_name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>credit</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>user_id is the primary key for this table.<br>Each row of this table contains the current credit information for each user.</p>
+<p>Table: Transactions</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>trans_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>paid_by</td>
+<td>int</td>
+</tr>
+<tr>
+<td>paid_to</td>
+<td>int</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>int</td>
+</tr>
+<tr>
+<td>transacted_on</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>trans_id is the primary key for this table.<br>Each row of this table contains the information about the transaction in the bank.<br>User with id (paid_by) transfer money to user with id (paid_to).</p>
+<p>Leetcode Bank (LCB) helps its coders in making virtual payments. Our bank records all transactions in the table Transaction, we want to find out the current balance of all users and check wheter they have breached their credit limit (If their current credit is less than 0).</p>
+<p>Write an SQL query to report.</p>
+<ul>
+<li>user_name</li>
+<li>credit, current balance after performing transactions.  </li>
+<li>credit_limit_breached, check credit_limit (“Yes” or “No”)</li>
+<li>Return the result table in any order.</li>
+</ul>
+<p>The query result format is in the following example.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">select u.user_id, u.user_name, credit+ifnull(total,0) as credit,</span><br><span class="line">if(credit+ifnull(total,0)&gt;0,'No','Yes') as credit_limit_breached</span><br><span class="line">from Users u</span><br><span class="line">left join</span><br><span class="line">(</span><br><span class="line">select user_id, sum(amount) as total</span><br><span class="line">from</span><br><span class="line">((select paid_by as user_id, -amount as amount</span><br><span class="line">from Transactions)</span><br><span class="line">union all</span><br><span class="line">(select paid_to as user_id, amount</span><br><span class="line">from Transactions) )a</span><br><span class="line">group by user_id</span><br><span class="line">) b</span><br><span class="line">on u.user_id=b.user_id</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select *,</span><br><span class="line">(case when CREDIT&gt;=0 then 'No' else 'Yes' end) as CREDIT_LIMIT_BREACHED from</span><br><span class="line">(select USER_ID, USER_NAME,</span><br><span class="line"> credit+ifnull(sum(case when u.user_id=t1.paid_by then -amount else amount end),0) as CREDIT</span><br><span class="line">from Users u</span><br><span class="line">left join Transactions t1</span><br><span class="line">on u.user_id=t1.paid_by or u.user_id=t1.paid_to</span><br><span class="line">group by user_id) test</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>注意union all和union的区别</p>
+<ul>
+<li>对重复结果的处理：UNION在进行表链接后会筛选掉重复的记录，Union All不会去除重复记录。</li>
+<li>排序的处理：Union将会按照字段的顺序进行排序；UNION ALL只是简单的将两个结果合并后就返回。</li>
+</ul>
+<hr>
+<h3 id="题目608-Tree-Node"><a href="#题目608-Tree-Node" class="headerlink" title="题目608. Tree Node:"></a><strong>题目608. Tree Node:</strong></h3><p>Given a table tree, id is identifier of the tree node and p_id is its parent node’s id.</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>p_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>null</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>Each node in the tree can be one of three types:<br>Leaf: if the node is a leaf node.<br>Root: if the node is the root of the tree.<br>Inner: If the node is neither a leaf node nor a root node.</p>
+<p>Write a query to print the node id and the type of the node. Sort your output by the node id. The result for the above sample is:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Root</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Inner</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Leaf</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Leaf</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Leaf</td>
+</tr>
+</tbody></table>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">select distinct t1.id,</span><br><span class="line">(case when t3.id is null then 'Root'</span><br><span class="line">when t2.id is null then 'Leaf'</span><br><span class="line">else 'Inner' end) as Type</span><br><span class="line">from</span><br><span class="line">tree t1</span><br><span class="line">left join</span><br><span class="line">tree t2</span><br><span class="line">on t2.p_id = t1.id # t2是t1的child</span><br><span class="line">left join</span><br><span class="line">tree t3</span><br><span class="line">on t3.id = t1.p_id # t3是t1的parent</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>Note the difference between isnull(expr,xxxx) and Is null and is not null</p>
+<hr>
+<h3 id="题目1285-Find-the-Start-and-End-Number-of-Continious-Ranges"><a href="#题目1285-Find-the-Start-and-End-Number-of-Continious-Ranges" class="headerlink" title="题目1285. Find the Start and End Number of Continious Ranges:"></a><strong>题目1285. Find the Start and End Number of Continious Ranges:</strong></h3><p>Table: Logs</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>log_id</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>id is the primary key for this table.<br>Each row of this table contains the ID in a log Table.</p>
+<p>Since some IDs have been removed from Logs. Write an SQL query to find the start and end number of continuous ranges in table Logs.</p>
+<p>Order the result table by start_id.</p>
+<p>The query result format is in the following example:</p>
+<p>Logs table:</p>
+<table>
+<thead>
+<tr>
+<th>log_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>7</td>
+</tr>
+<tr>
+<td>8</td>
+</tr>
+<tr>
+<td>10</td>
+</tr>
+</tbody></table>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>start_id</th>
+<th>end_id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>10</td>
+<td>10</td>
+</tr>
+</tbody></table>
+<p>The result table should contain all ranges in table Logs.<br>From 1 to 3 is contained in the table.<br>From 4 to 6 is missing in the table<br>From 7 to 8 is contained in the table.<br>Number 9 is missing in the table.<br>Number 10 is contained in the table.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select min(log_id) as start_id, max(log_id) as end_id</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select *, rank() over(order by log_id) as myrank</span><br><span class="line">from Logs</span><br><span class="line">) t</span><br><span class="line">group by log_id-myrank</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
 <hr>
-<h3 id="题目1555-Bank-Account-Summary"><a href="#题目1555-Bank-Account-Summary" class="headerlink" title="题目1555. Bank Account Summary:"></a><strong>题目1555. Bank Account Summary:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="题目1501-Countries-You-Can-Safely-Invest-In"><a href="#题目1501-Countries-You-Can-Safely-Invest-In" class="headerlink" title="题目1501. Countries You Can Safely Invest In:"></a><strong>题目1501. Countries You Can Safely Invest In:</strong></h3><p>Table Person:</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>phone_number</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>id is the primary key for this table.<br>Each row of this table contains the name of a person and their phone number.<br>Phone number will be in the form ‘xxx-yyyyyyy’ where xxx is the country code (3 characters) and yyyyyyy is the phone number (7 characters) where x and y are digits. Both can contain leading zeros.</p>
+<p>Table Country:</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>country_code</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>country_code is the primary key for this table.<br>Each row of this table contains the country name and its code. country_code will be in the form ‘xxx’ where x is digits.</p>
+<p>Table Calls:</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>caller_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>callee_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table, it may contain duplicates.<br>Each row of this table contains the caller id, callee id and the duration of the call in minutes. caller_id != callee_id</p>
+<p>A telecommunications company wants to invest in new countries. The company intends to invest in the countries where the average call duration of the calls in this country is strictly greater than the global average call duration.</p>
+<p>Write an SQL query to find the countries where this company can invest.</p>
+<p>Return the result table in any order.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">elect c.name as country</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select * from</span><br><span class="line">Calls</span><br><span class="line">UNION ALL</span><br><span class="line">select callee_id, caller_id, duration</span><br><span class="line">from</span><br><span class="line">Calls</span><br><span class="line">) temp</span><br><span class="line">left join Person p</span><br><span class="line">on temp.caller_id=p.id</span><br><span class="line">left join Country c</span><br><span class="line">on substr(phone_number,1,3)=c.country_code</span><br><span class="line">group by c.name</span><br><span class="line">having avg(duration)&gt;(select avg(duration) from Calls)</span><br></pre></td></tr></tbody></table></figure>
+<p>或者使用CTE</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">with CTE as(</span><br><span class="line">select * from Calls</span><br><span class="line">union all</span><br><span class="line">select callee_id, caller_id, duration</span><br><span class="line">from Calls</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">select c.name as country</span><br><span class="line">from CTE</span><br><span class="line">left join Person p</span><br><span class="line">on p.id=CTE.caller_id</span><br><span class="line">left join Country c</span><br><span class="line">on substring(p.phone_number,1,3)=c.country_code</span><br><span class="line">group by c.name</span><br><span class="line">having avg(duration)&gt;(select avg(duration) from Calls)</span><br></pre></td></tr></tbody></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">elect c.name as country</span><br><span class="line">from Country c</span><br><span class="line">join Person p</span><br><span class="line">on substr(p.phone_number,1,3)=c.country_code</span><br><span class="line">join Calls ca</span><br><span class="line">on p.id in (ca.caller_id,ca.callee_id)</span><br><span class="line">group by country</span><br><span class="line">having avg(duration)&gt; (select avg(duration) from Calls)</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>CTE只是一种retain罢了</p>
+<hr>
+<h3 id="题目1811-Find-Interview-Candidates"><a href="#题目1811-Find-Interview-Candidates" class="headerlink" title="题目1811. Find Interview Candidates"></a><strong>题目1811. Find Interview Candidates</strong></h3><p>Table: Contests</p>
+<p>+————–+——+<br>| Column Name  | Type |<br>+————–+——+<br>| contest_id   | int  |<br>| gold_medal   | int  |<br>| silver_medal | int  |<br>| bronze_medal | int  |<br>+————–+——+<br>contest_id is the primary key for this table.<br>This table contains the LeetCode contest ID and the user IDs of the gold, silver, and bronze medalists.<br>It is guaranteed that any consecutive contests have consecutive IDs and that no ID is skipped.</p>
+<p>Table: Users</p>
+<p>+————-+———+<br>| Column Name | Type    |<br>+————-+———+<br>| user_id     | int     |<br>| mail        | varchar |<br>| name        | varchar |<br>+————-+———+<br>user_id is the primary key for this table.<br>This table contains information about the users.</p>
+<p>Write an SQL query to report the name and the mail of all interview candidates. A user is an interview candidate if at least one of these two conditions is true:</p>
+<p>The user won any medal in three or more consecutive contests.<br>The user won the gold medal in three or more different contests (not necessarily consecutive).<br>Return the result table in any order.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">select name, mail</span><br><span class="line">from Contests c join Users u1</span><br><span class="line">on c.gold_medal=u1.user_id</span><br><span class="line">group by gold_medal</span><br><span class="line">having count(*)&gt;=3</span><br><span class="line">union</span><br><span class="line">select name,mail</span><br><span class="line">from Users u , Contests c1 , Contests c2, Contests c3</span><br><span class="line">where u.user_id in  (c1.gold_medal, c1.silver_medal, c1.bronze_medal)</span><br><span class="line">      and u.user_id in  (c2.gold_medal, c2.silver_medal, c2.bronze_medal)</span><br><span class="line">      and u.user_id in  (c3.gold_medal, c3.silver_medal, c3.bronze_medal)</span><br><span class="line">      and c1.contest_id-1 = c2.contest_id and c2.contest_id-1 = c3.contest_id</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong></p>
+<ul>
+<li>union会自己去重</li>
+<li>in的用法</li>
+</ul>
+<hr>
+<h3 id="题目569-Median-Employee-Salary-Hard"><a href="#题目569-Median-Employee-Salary-Hard" class="headerlink" title="题目569. Median Employee Salary Hard:"></a><strong>题目569. Median Employee Salary Hard:</strong></h3><p>The Employee table holds all employees. The employee table has three columns: Employee Id, Company Name, and Salary.</p>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Company</th>
+<th>Salary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A</td>
+<td>2341</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A</td>
+<td>341</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A</td>
+<td>15</td>
+</tr>
+<tr>
+<td>4</td>
+<td>A</td>
+<td>15314</td>
+</tr>
+<tr>
+<td>5</td>
+<td>A</td>
+<td>451</td>
+</tr>
+<tr>
+<td>6</td>
+<td>A</td>
+<td>513</td>
+</tr>
+<tr>
+<td>7</td>
+<td>B</td>
+<td>15</td>
+</tr>
+<tr>
+<td>8</td>
+<td>B</td>
+<td>13</td>
+</tr>
+<tr>
+<td>9</td>
+<td>B</td>
+<td>1154</td>
+</tr>
+<tr>
+<td>10</td>
+<td>B</td>
+<td>1345</td>
+</tr>
+<tr>
+<td>11</td>
+<td>B</td>
+<td>1221</td>
+</tr>
+<tr>
+<td>12</td>
+<td>B</td>
+<td>234</td>
+</tr>
+<tr>
+<td>13</td>
+<td>C</td>
+<td>2345</td>
+</tr>
+<tr>
+<td>14</td>
+<td>C</td>
+<td>2645</td>
+</tr>
+<tr>
+<td>15</td>
+<td>C</td>
+<td>2645</td>
+</tr>
+<tr>
+<td>16</td>
+<td>C</td>
+<td>2652</td>
+</tr>
+<tr>
+<td>17</td>
+<td>C</td>
+<td>65</td>
+</tr>
+</tbody></table>
+<p>Write a SQL query to find the median salary of each company. Bonus points if you can solve it without using any built-in SQL functions.</p>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Company</th>
+<th>Salary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5</td>
+<td>A</td>
+<td>451</td>
+</tr>
+<tr>
+<td>6</td>
+<td>A</td>
+<td>513</td>
+</tr>
+<tr>
+<td>12</td>
+<td>B</td>
+<td>234</td>
+</tr>
+<tr>
+<td>9</td>
+<td>B</td>
+<td>1154</td>
+</tr>
+<tr>
+<td>14</td>
+<td>C</td>
+<td>2645</td>
+</tr>
+</tbody></table>
+<p><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select Id, Company, Salary</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select *,</span><br><span class="line">row_number() over(partition by Company order by Salary,id) as myasc,</span><br><span class="line">row_number() over(partition by Company order by Salary desc, id desc) as mydesc</span><br><span class="line">from Employee e) test</span><br><span class="line">where myasc between mydesc-1 and mydesc+1</span><br><span class="line">order by Company,Salary</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
 <hr>
-<h3 id="题目608-Tree-Node"><a href="#题目608-Tree-Node" class="headerlink" title="题目608. Tree Node:"></a><strong>题目608. Tree Node:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="题目1777-Product’s-Price-For-Each-Store"><a href="#题目1777-Product’s-Price-For-Each-Store" class="headerlink" title="题目1777. Product’s Price For Each Store:"></a><strong>题目1777. Product’s Price For Each Store:</strong></h3><p>Table: Products</p>
+<p>+————-+———+<br>| Column Name | Type    |<br>+————-+———+<br>| product_id  | int     |<br>| store       | enum    |<br>| price       | int     |<br>+————-+———+<br>(product_id,store) is the primary key for this table.<br>store is an ENUM of type (‘store1’, ‘store2’, ‘store3’) where each represents the store this product is available at.<br>price is the price of the product at this store.</p>
+<p>Write an SQL query to find the price of each product in each store.</p>
+<p>Return the result table in any order.</p>
+<p>The query result format is in the following example:</p>
+<p>Products table:<br>+————-+——–+——-+<br>| product_id  | store  | price |<br>+————-+——–+——-+<br>| 0           | store1 | 95    |<br>| 0           | store3 | 105   |<br>| 0           | store2 | 100   |<br>| 1           | store1 | 70    |<br>| 1           | store3 | 80    |<br>+————-+——–+——-+<br>Result table:<br>+————-+——–+——–+——–+<br>| product_id  | store1 | store2 | store3 |<br>+————-+——–+——–+——–+<br>| 0           | 95     | 100    | 105    |<br>| 1           | 70     | null   | 80     |<br>+————-+——–+——–+——–+<br>Product 0 price’s are 95 for store1, 100 for store2 and, 105 for store3.<br>Product 1 price’s are 70 for store1, 80 for store3 and, it’s not sold in store2.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select  product_id,</span><br><span class="line">sum(case when store='store1' then price end) as store1,</span><br><span class="line">sum(case when store='store2' then price end) as store2,</span><br><span class="line">sum(case when store='store3' then price end) as store3</span><br><span class="line">from Products p</span><br><span class="line">group by product_id</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
+<ul>
+<li>if no sum and keep group by: 那么只会留下每个product_id的第一行</li>
+<li>if no sum and no group by：那么每个id会对应很多行</li>
+</ul>
 <hr>
-<h3 id="题目1285-Find-the-Start-and-End-Number-of-Continious-Ranges"><a href="#题目1285-Find-the-Start-and-End-Number-of-Continious-Ranges" class="headerlink" title="题目1285. Find the Start and End Number of Continious Ranges:"></a><strong>题目1285. Find the Start and End Number of Continious Ranges:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="题目1613-Find-the-Missing-IDs"><a href="#题目1613-Find-the-Missing-IDs" class="headerlink" title="题目1613. Find the Missing IDs:"></a><strong>题目1613. Find the Missing IDs:</strong></h3><p>Table: Customers</p>
+<p>+—————+———+<br>| Column Name   | Type    |<br>+—————+———+<br>| customer_id   | int     |<br>| customer_name | varchar |<br>+—————+———+<br>customer_id is the primary key for this table.<br>Each row of this table contains the name and the id customer.</p>
+<p>Write an SQL query to find the missing customer IDs. The missing IDs are ones that are not in the Customers table but are in the range between 1 and the maximum customer_id present in the table.</p>
+<p>Notice that the maximum customer_id will not exceed 100.</p>
+<p>Return the result table ordered by ids in ascending order.</p>
+<p>The query result format is in the following example.</p>
+<p>Customers table:<br>+————-+—————+<br>| customer_id | customer_name |<br>+————-+—————+<br>| 1           | Alice         |<br>| 4           | Bob           |<br>| 5           | Charlie       |<br>+————-+—————+</p>
+<p>Result table:<br>+—–+<br>| ids |<br>+—–+<br>| 2   |<br>| 3   |<br>+—–+<br>The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">WITH RECURSIVE seq AS (</span><br><span class="line">    SELECT 1 AS value UNION ALL SELECT value + 1 FROM seq WHERE value &lt; (select max(customer_id) from Customers)</span><br><span class="line">    )</span><br><span class="line">select value as ids from seq</span><br><span class="line">where value not in</span><br><span class="line">(select customer_id from Customers)</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>注意recursive的用法</p>
+<hr>
+<h3 id="题目1783-Grand-Slam-Titles"><a href="#题目1783-Grand-Slam-Titles" class="headerlink" title="题目1783. Grand Slam Titles:"></a><strong>题目1783. Grand Slam Titles:</strong></h3><p>Table: Players</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>player_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>player_name</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>player_id is the primary key for this table.</td>
+<td></td>
+</tr>
+<tr>
+<td>Each row in this table contains the name and the ID of a tennis player.</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Table: Championships</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>year</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Wimbledon</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Fr_open</td>
+<td>int</td>
+</tr>
+<tr>
+<td>US_open</td>
+<td>int</td>
+</tr>
+<tr>
+<td>Au_open</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>year is the primary key for this table.<br>Each row of this table containts the IDs of the players who won one each tennis tournament of the grand slam.</p>
+<p>Write an SQL query to report the number of grand slam tournaments won by each player. Do not include the players who did not win any tournament.</p>
+<p>Return the result table in any order.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SELECT *</span><br><span class="line">FROM (</span><br><span class="line">SELECT</span><br><span class="line">player_id,</span><br><span class="line">player_name,</span><br><span class="line">SUM( CASE WHEN player_id = Wimbledon THEN 1 ELSE 0 END +</span><br><span class="line">    CASE WHEN player_id = Fr_open THEN 1 ELSE 0 END +</span><br><span class="line">    CASE WHEN player_id = US_open THEN 1 ELSE 0 END +</span><br><span class="line">    CASE WHEN player_id = Au_open THEN 1 ELSE 0 END ) AS grand_slams_count</span><br><span class="line">FROM Players CROSS JOIN Championships GROUP BY player_id, player_name ) T</span><br><span class="line">WHERE grand_slams_count &gt; 0</span><br></pre></td></tr></tbody></table></figure>
+<p>或者CTE</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">	CTE:</span><br><span class="line">	WITH CTE AS</span><br><span class="line">   (</span><br><span class="line">    SELECT Wimbledon AS id FROM Championships</span><br><span class="line">    UNION ALL</span><br><span class="line">    SELECT Fr_open AS id FROM Championships</span><br><span class="line">    UNION ALL</span><br><span class="line">    SELECT US_open AS id FROM Championships</span><br><span class="line">    UNION ALL</span><br><span class="line">    SELECT Au_open AS id FROM Championships</span><br><span class="line">   )</span><br><span class="line"></span><br><span class="line">SELECT player_id,player_name,COUNT(*) AS grand_slams_count</span><br><span class="line">FROM Players INNER JOIN CTE ON Players.player_id = CTE.id</span><br><span class="line">GROUP BY player_id,</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Insights:</strong><br>Cross Join = 直接中间放个逗号 =  cartesian product</p>
+<hr>
+<h3 id="题目1107-New-Users-Daily-Count"><a href="#题目1107-New-Users-Daily-Count" class="headerlink" title="题目1107. New Users Daily Count:"></a><strong>题目1107. New Users Daily Count:</strong></h3><p>Table: Traffic</p>
+<p>+—————+———+<br>| Column Name   | Type    |<br>+—————+———+<br>| user_id       | int     |<br>| activity      | enum    |<br>| activity_date | date    |<br>+—————+———+<br>There is no primary key for this table, it may have duplicate rows.<br>The activity column is an ENUM type of (‘login’, ‘logout’, ‘jobs’, ‘groups’, ‘homepage’).</p>
+<p>Write an SQL query that reports for every date within at most 90 days from today, the number of users that logged in for the first time on that date. Assume today is 2019-06-30.</p>
+<p>The query result format is in the following example:</p>
+<p>Traffic table:<br>+———+———-+—————+<br>| user_id | activity | activity_date |<br>+———+———-+—————+<br>| 1       | login    | 2019-05-01    |<br>| 1       | homepage | 2019-05-01    |<br>| 1       | logout   | 2019-05-01    |<br>| 2       | login    | 2019-06-21    |<br>| 2       | logout   | 2019-06-21    |<br>| 3       | login    | 2019-01-01    |<br>| 3       | jobs     | 2019-01-01    |<br>| 3       | logout   | 2019-01-01    |<br>| 4       | login    | 2019-06-21    |<br>| 4       | groups   | 2019-06-21    |<br>| 4       | logout   | 2019-06-21    |<br>| 5       | login    | 2019-03-01    |<br>| 5       | logout   | 2019-03-01    |<br>| 5       | login    | 2019-06-21    |<br>| 5       | logout   | 2019-06-21    |<br>+———+———-+—————+</p>
+<p>Result table:<br>+————+————-+<br>| login_date | user_count  |<br>+————+————-+<br>| 2019-05-01 | 1           |<br>| 2019-06-21 | 2           |<br>+————+————-+<br>Note that we only care about dates with non zero user count.<br>The user with id 5 first logged in on 2019-03-01 so he’s not counted on 2019-06-21.<br><strong>Answer:</strong></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select login_date, count(1) user_count</span><br><span class="line">from</span><br><span class="line">(select user_id, min(activity_date) login_date</span><br><span class="line">from traffic</span><br><span class="line">where activity = 'login'</span><br><span class="line">group by user_id) a</span><br><span class="line">where datediff('2019-06-30',login_date)&lt;=90</span><br><span class="line">group by login_date</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
+<ul>
+<li>datadiff 后面的时间比前面的时间大</li>
+<li>count(1) 和 count(*)</li>
+</ul>
 <hr>
-<h3 id="题目1501-Countries-You-Can-Safely-Invest-In"><a href="#题目1501-Countries-You-Can-Safely-Invest-In" class="headerlink" title="题目1501. Countries You Can Safely Invest In:"></a><strong>题目1501. Countries You Can Safely Invest In:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1811-Find-Interview-Candidates"><a href="#题目1811-Find-Interview-Candidates" class="headerlink" title="题目1811. Find Interview Candidates"></a><strong>题目1811. Find Interview Candidates</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目569-Median-Employee-Salary-Hard"><a href="#题目569-Median-Employee-Salary-Hard" class="headerlink" title="题目569. Median Employee Salary Hard:"></a><strong>题目569. Median Employee Salary Hard:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1777-Product’s-Price-For-Each-Store"><a href="#题目1777-Product’s-Price-For-Each-Store" class="headerlink" title="题目1777. Product’s Price For Each Store:"></a><strong>题目1777. Product’s Price For Each Store:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1613-Find-the-Missing-IDs"><a href="#题目1613-Find-the-Missing-IDs" class="headerlink" title="题目1613. Find the Missing IDs:"></a><strong>题目1613. Find the Missing IDs:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1783-Grand-Slam-Titles"><a href="#题目1783-Grand-Slam-Titles" class="headerlink" title="题目1783. Grand Slam Titles:"></a><strong>题目1783. Grand Slam Titles:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目1107-New-Users-Daily-Count"><a href="#题目1107-New-Users-Daily-Count" class="headerlink" title="题目1107. New Users Daily Count:"></a><strong>题目1107. New Users Daily Count:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<p><strong>Insights:</strong></p>
-<hr>
-<h3 id="题目585-Investments-in-2016"><a href="#题目585-Investments-in-2016" class="headerlink" title="题目585. Investments in 2016:"></a><strong>题目585. Investments in 2016:</strong></h3><p><strong>Answer:</strong></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
+<h3 id="题目585-Investments-in-2016"><a href="#题目585-Investments-in-2016" class="headerlink" title="题目585. Investments in 2016:"></a><strong>题目585. Investments in 2016:</strong></h3><p>Write a query to print the sum of all total investment values in 2016 (TIV_2016), to a scale of 2 decimal places, for all policy holders who meet the following criteria:</p>
+<p>Have the same TIV_2015 value as one or more other policyholders.<br>Are not located in the same city as any other policyholder (i.e.: the (latitude, longitude) attribute pairs must be unique).<br>Input Format:<br>The insurance table is described as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PID</td>
+<td>INTEGER(11)</td>
+</tr>
+<tr>
+<td>TIV_2015</td>
+<td>NUMERIC(15,2)</td>
+</tr>
+<tr>
+<td>TIV_2016</td>
+<td>NUMERIC(15,2)</td>
+</tr>
+<tr>
+<td>LAT</td>
+<td>NUMERIC(5,2)</td>
+</tr>
+<tr>
+<td>LON</td>
+<td>NUMERIC(5,2)</td>
+</tr>
+<tr>
+<td>where PID is the policyholder’s policy ID, TIV_2015 is the total investment value in 2015, TIV_2016 is the total investment value in 2016, LAT is the latitude of the policy holder’s city, and LON is the longitude of the policy holder’s city.</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Sample Input</p>
+<table>
+<thead>
+<tr>
+<th>PID</th>
+<th>TIV_2015</th>
+<th>TIV_2016</th>
+<th>LAT</th>
+<th>LON</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10</td>
+<td>5</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>20</td>
+<td>20</td>
+<td>20</td>
+<td>20</td>
+</tr>
+<tr>
+<td>3</td>
+<td>10</td>
+<td>30</td>
+<td>20</td>
+<td>20</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10</td>
+<td>40</td>
+<td>40</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Sample Output</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>TIV_2016</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>45.00</td>
+</tr>
+<tr>
+<td><strong>Answer:</strong></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">    SUM(insurance.TIV_2016) AS TIV_2016</span><br><span class="line">FROM</span><br><span class="line">    insurance</span><br><span class="line">WHERE</span><br><span class="line">    insurance.TIV_2015 IN</span><br><span class="line">    (</span><br><span class="line">      SELECT</span><br><span class="line">        TIV_2015</span><br><span class="line">      FROM</span><br><span class="line">        insurance</span><br><span class="line">      GROUP BY TIV_2015</span><br><span class="line">      HAVING COUNT(*) &gt; 1</span><br><span class="line">    )</span><br><span class="line">    AND CONCAT(LAT, LON) IN</span><br><span class="line">    (</span><br><span class="line">      SELECT</span><br><span class="line">        CONCAT(LAT, LON)</span><br><span class="line">      FROM</span><br><span class="line">        insurance</span><br><span class="line">      GROUP BY LAT , LON</span><br><span class="line">      HAVING COUNT(*) = 1</span><br><span class="line">    )</span><br></pre></td></tr></tbody></table></figure>
 <p><strong>Insights:</strong></p>
 <hr>
 </body></html>
@@ -159,11 +787,15 @@
     
         <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Leetcode/">#Leetcode</a></span>
     
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/SQL/">#SQL</a></span>
+    
     </div>
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/08/30/sql-improvement/">SQL调优和注意事项</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
