@@ -427,9 +427,53 @@
 <p><strong>Insights:</strong><br>CTE只是一种retain罢了</p>
 <hr>
 <h3 id="题目1811-Find-Interview-Candidates"><a href="#题目1811-Find-Interview-Candidates" class="headerlink" title="题目1811. Find Interview Candidates"></a><strong>题目1811. Find Interview Candidates</strong></h3><p>Table: Contests</p>
-<p>+————–+——+<br>| Column Name  | Type |<br>+————–+——+<br>| contest_id   | int  |<br>| gold_medal   | int  |<br>| silver_medal | int  |<br>| bronze_medal | int  |<br>+————–+——+<br>contest_id is the primary key for this table.<br>This table contains the LeetCode contest ID and the user IDs of the gold, silver, and bronze medalists.<br>It is guaranteed that any consecutive contests have consecutive IDs and that no ID is skipped.</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>contest_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>gold_medal</td>
+<td>int</td>
+</tr>
+<tr>
+<td>silver_medal</td>
+<td>int</td>
+</tr>
+<tr>
+<td>bronze_medal</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>contest_id is the primary key for this table.<br>This table contains the LeetCode contest ID and the user IDs of the gold, silver, and bronze medalists.<br>It is guaranteed that any consecutive contests have consecutive IDs and that no ID is skipped.</p>
 <p>Table: Users</p>
-<p>+————-+———+<br>| Column Name | Type    |<br>+————-+———+<br>| user_id     | int     |<br>| mail        | varchar |<br>| name        | varchar |<br>+————-+———+<br>user_id is the primary key for this table.<br>This table contains information about the users.</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>mail</td>
+<td>varchar</td>
+</tr>
+<tr>
+<td>name</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>user_id is the primary key for this table.<br>This table contains information about the users.</p>
 <p>Write an SQL query to report the name and the mail of all interview candidates. A user is an interview candidate if at least one of these two conditions is true:</p>
 <p>The user won any medal in three or more consecutive contests.<br>The user won the gold medal in three or more different contests (not necessarily consecutive).<br>Return the result table in any order.<br><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">select name, mail</span><br><span class="line">from Contests c join Users u1</span><br><span class="line">on c.gold_medal=u1.user_id</span><br><span class="line">group by gold_medal</span><br><span class="line">having count(*)&gt;=3</span><br><span class="line">union</span><br><span class="line">select name,mail</span><br><span class="line">from Users u , Contests c1 , Contests c2, Contests c3</span><br><span class="line">where u.user_id in  (c1.gold_medal, c1.silver_medal, c1.bronze_medal)</span><br><span class="line">      and u.user_id in  (c2.gold_medal, c2.silver_medal, c2.bronze_medal)</span><br><span class="line">      and u.user_id in  (c3.gold_medal, c3.silver_medal, c3.bronze_medal)</span><br><span class="line">      and c1.contest_id-1 = c2.contest_id and c2.contest_id-1 = c3.contest_id</span><br></pre></td></tr></tbody></table></figure>
@@ -576,11 +620,55 @@
 <p><strong>Insights:</strong></p>
 <hr>
 <h3 id="题目1777-Product’s-Price-For-Each-Store"><a href="#题目1777-Product’s-Price-For-Each-Store" class="headerlink" title="题目1777. Product’s Price For Each Store:"></a><strong>题目1777. Product’s Price For Each Store:</strong></h3><p>Table: Products</p>
-<p>+————-+———+<br>| Column Name | Type    |<br>+————-+———+<br>| product_id  | int     |<br>| store       | enum    |<br>| price       | int     |<br>+————-+———+<br>(product_id,store) is the primary key for this table.<br>store is an ENUM of type (‘store1’, ‘store2’, ‘store3’) where each represents the store this product is available at.<br>price is the price of the product at this store.</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>product_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>store</td>
+<td>enum</td>
+</tr>
+<tr>
+<td>price</td>
+<td>int</td>
+</tr>
+</tbody></table>
+<p>(product_id,store) is the primary key for this table.<br>store is an ENUM of type (‘store1’, ‘store2’, ‘store3’) where each represents the store this product is available at.<br>price is the price of the product at this store.</p>
 <p>Write an SQL query to find the price of each product in each store.</p>
 <p>Return the result table in any order.</p>
 <p>The query result format is in the following example:</p>
-<p>Products table:<br>+————-+——–+——-+<br>| product_id  | store  | price |<br>+————-+——–+——-+<br>| 0           | store1 | 95    |<br>| 0           | store3 | 105   |<br>| 0           | store2 | 100   |<br>| 1           | store1 | 70    |<br>| 1           | store3 | 80    |<br>+————-+——–+——-+<br>Result table:<br>+————-+——–+——–+——–+<br>| product_id  | store1 | store2 | store3 |<br>+————-+——–+——–+——–+<br>| 0           | 95     | 100    | 105    |<br>| 1           | 70     | null   | 80     |<br>+————-+——–+——–+——–+<br>Product 0 price’s are 95 for store1, 100 for store2 and, 105 for store3.<br>Product 1 price’s are 70 for store1, 80 for store3 and, it’s not sold in store2.<br><strong>Answer:</strong></p>
+<p>Products table:<br>| product_id  | store  | price |<br>| — | — | — |<br>| 0           | store1 | 95    |<br>| 0           | store3 | 105   |<br>| 0           | store2 | 100   |<br>| 1           | store1 | 70    |<br>| 1           | store3 | 80    |</p>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>product_id</th>
+<th>store1</th>
+<th>store2</th>
+<th>store3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>95</td>
+<td>100</td>
+<td>105</td>
+</tr>
+<tr>
+<td>1</td>
+<td>70</td>
+<td>null</td>
+<td>80</td>
+</tr>
+</tbody></table>
+<p>Product 0 price’s are 95 for store1, 100 for store2 and, 105 for store3.<br>Product 1 price’s are 70 for store1, 80 for store3 and, it’s not sold in store2.<br><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select  product_id,</span><br><span class="line">sum(case when store='store1' then price end) as store1,</span><br><span class="line">sum(case when store='store2' then price end) as store2,</span><br><span class="line">sum(case when store='store3' then price end) as store3</span><br><span class="line">from Products p</span><br><span class="line">group by product_id</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
@@ -590,13 +678,68 @@
 </ul>
 <hr>
 <h3 id="题目1613-Find-the-Missing-IDs"><a href="#题目1613-Find-the-Missing-IDs" class="headerlink" title="题目1613. Find the Missing IDs:"></a><strong>题目1613. Find the Missing IDs:</strong></h3><p>Table: Customers</p>
-<p>+—————+———+<br>| Column Name   | Type    |<br>+—————+———+<br>| customer_id   | int     |<br>| customer_name | varchar |<br>+—————+———+<br>customer_id is the primary key for this table.<br>Each row of this table contains the name and the id customer.</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>customer_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>customer_name</td>
+<td>varchar</td>
+</tr>
+</tbody></table>
+<p>customer_id is the primary key for this table.<br>Each row of this table contains the name and the id customer.</p>
 <p>Write an SQL query to find the missing customer IDs. The missing IDs are ones that are not in the Customers table but are in the range between 1 and the maximum customer_id present in the table.</p>
 <p>Notice that the maximum customer_id will not exceed 100.</p>
 <p>Return the result table ordered by ids in ascending order.</p>
 <p>The query result format is in the following example.</p>
-<p>Customers table:<br>+————-+—————+<br>| customer_id | customer_name |<br>+————-+—————+<br>| 1           | Alice         |<br>| 4           | Bob           |<br>| 5           | Charlie       |<br>+————-+—————+</p>
-<p>Result table:<br>+—–+<br>| ids |<br>+—–+<br>| 2   |<br>| 3   |<br>+—–+<br>The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.<br><strong>Answer:</strong></p>
+<p>Customers table:</p>
+<table>
+<thead>
+<tr>
+<th>customer_id</th>
+<th>customer_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Alice</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bob</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Charlie</td>
+</tr>
+</tbody></table>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>ids</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.</td>
+</tr>
+<tr>
+<td><strong>Answer:</strong></td>
+</tr>
+</tbody></table>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">WITH RECURSIVE seq AS (</span><br><span class="line">    SELECT 1 AS value UNION ALL SELECT value + 1 FROM seq WHERE value &lt; (select max(customer_id) from Customers)</span><br><span class="line">    )</span><br><span class="line">select value as ids from seq</span><br><span class="line">where value not in</span><br><span class="line">(select customer_id from Customers)</span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong><br>注意recursive的用法</p>
@@ -669,11 +812,132 @@
 <p><strong>Insights:</strong><br>Cross Join = 直接中间放个逗号 =  cartesian product</p>
 <hr>
 <h3 id="题目1107-New-Users-Daily-Count"><a href="#题目1107-New-Users-Daily-Count" class="headerlink" title="题目1107. New Users Daily Count:"></a><strong>题目1107. New Users Daily Count:</strong></h3><p>Table: Traffic</p>
-<p>+—————+———+<br>| Column Name   | Type    |<br>+—————+———+<br>| user_id       | int     |<br>| activity      | enum    |<br>| activity_date | date    |<br>+—————+———+<br>There is no primary key for this table, it may have duplicate rows.<br>The activity column is an ENUM type of (‘login’, ‘logout’, ‘jobs’, ‘groups’, ‘homepage’).</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user_id</td>
+<td>int</td>
+</tr>
+<tr>
+<td>activity</td>
+<td>enum</td>
+</tr>
+<tr>
+<td>activity_date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p>There is no primary key for this table, it may have duplicate rows.<br>The activity column is an ENUM type of (‘login’, ‘logout’, ‘jobs’, ‘groups’, ‘homepage’).</p>
 <p>Write an SQL query that reports for every date within at most 90 days from today, the number of users that logged in for the first time on that date. Assume today is 2019-06-30.</p>
 <p>The query result format is in the following example:</p>
-<p>Traffic table:<br>+———+———-+—————+<br>| user_id | activity | activity_date |<br>+———+———-+—————+<br>| 1       | login    | 2019-05-01    |<br>| 1       | homepage | 2019-05-01    |<br>| 1       | logout   | 2019-05-01    |<br>| 2       | login    | 2019-06-21    |<br>| 2       | logout   | 2019-06-21    |<br>| 3       | login    | 2019-01-01    |<br>| 3       | jobs     | 2019-01-01    |<br>| 3       | logout   | 2019-01-01    |<br>| 4       | login    | 2019-06-21    |<br>| 4       | groups   | 2019-06-21    |<br>| 4       | logout   | 2019-06-21    |<br>| 5       | login    | 2019-03-01    |<br>| 5       | logout   | 2019-03-01    |<br>| 5       | login    | 2019-06-21    |<br>| 5       | logout   | 2019-06-21    |<br>+———+———-+—————+</p>
-<p>Result table:<br>+————+————-+<br>| login_date | user_count  |<br>+————+————-+<br>| 2019-05-01 | 1           |<br>| 2019-06-21 | 2           |<br>+————+————-+<br>Note that we only care about dates with non zero user count.<br>The user with id 5 first logged in on 2019-03-01 so he’s not counted on 2019-06-21.<br><strong>Answer:</strong></p>
+<p>Traffic table:</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>activity</th>
+<th>activity_date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>login</td>
+<td>2019-05-01</td>
+</tr>
+<tr>
+<td>1</td>
+<td>homepage</td>
+<td>2019-05-01</td>
+</tr>
+<tr>
+<td>1</td>
+<td>logout</td>
+<td>2019-05-01</td>
+</tr>
+<tr>
+<td>2</td>
+<td>login</td>
+<td>2019-06-21</td>
+</tr>
+<tr>
+<td>2</td>
+<td>logout</td>
+<td>2019-06-21</td>
+</tr>
+<tr>
+<td>3</td>
+<td>login</td>
+<td>2019-01-01</td>
+</tr>
+<tr>
+<td>3</td>
+<td>jobs</td>
+<td>2019-01-01</td>
+</tr>
+<tr>
+<td>3</td>
+<td>logout</td>
+<td>2019-01-01</td>
+</tr>
+<tr>
+<td>4</td>
+<td>login</td>
+<td>2019-06-21</td>
+</tr>
+<tr>
+<td>4</td>
+<td>groups</td>
+<td>2019-06-21</td>
+</tr>
+<tr>
+<td>4</td>
+<td>logout</td>
+<td>2019-06-21</td>
+</tr>
+<tr>
+<td>5</td>
+<td>login</td>
+<td>2019-03-01</td>
+</tr>
+<tr>
+<td>5</td>
+<td>logout</td>
+<td>2019-03-01</td>
+</tr>
+<tr>
+<td>5</td>
+<td>login</td>
+<td>2019-06-21</td>
+</tr>
+<tr>
+<td>5</td>
+<td>logout</td>
+<td>2019-06-21</td>
+</tr>
+</tbody></table>
+<p>Result table:</p>
+<table>
+<thead>
+<tr>
+<th>login_date</th>
+<th>user_count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019-05-01</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019-06-21</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>Note that we only care about dates with non zero user count.<br>The user with id 5 first logged in on 2019-03-01 so he’s not counted on 2019-06-21.<br><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select login_date, count(1) user_count</span><br><span class="line">from</span><br><span class="line">(select user_id, min(activity_date) login_date</span><br><span class="line">from traffic</span><br><span class="line">where activity = 'login'</span><br><span class="line">group by user_id) a</span><br><span class="line">where datediff('2019-06-30',login_date)&lt;=90</span><br><span class="line">group by login_date</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
 
 <p><strong>Insights:</strong></p>
@@ -795,7 +1059,7 @@
     <div class="columns is-mobile is-multiline article-nav">
         <span class="column is-12-mobile is-half-desktop  article-nav-prev">
             
-            <a href="/2021/08/30/sql-improvement/">SQL调优和注意事项</a>
+            <a href="/2021/08/30/sql-improvement/">SQL调优和注意事项（上）</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
