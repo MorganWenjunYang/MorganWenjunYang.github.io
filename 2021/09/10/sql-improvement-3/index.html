@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>mysql小知识及进阶知识 - Morgan Freewoman</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt="" height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            mysql小知识及进阶知识
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-09-10T14:40:33.000Z" itemprop="datePublished">Sep 10 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            an hour read (About 9331 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h3 id="入门知识查漏补缺"><a href="#入门知识查漏补缺" class="headerlink" title="入门知识查漏补缺"></a>入门知识查漏补缺</h3><ol>
+<li>创建数据库 <code>create database dbname;</code></li>
+<li>查看已有数据库 <code>show databases;</code></li>
+<li>切换到某数据库 <code>use dbname;</code></li>
+<li>删除数据库 <code>drop database dbname;</code></li>
+<li>用<code>create table tbname(id int, var1 varchar(20), sex char(2))</code>建表，<code>用desc tbname</code>查看表的基本信息</li>
+<li>查看建立表的语句<code>show create table tbname job</code></li>
+<li>删除表 <code>drop table tbname</code>，这种删除可以通过日志恢复，如果使用<code>truncate table tbname</code>则会永久删除该表<span id="more"></span></li>
+<li>修改表结构<code>alter table tbname modify name varchar(25);</code>(修改已有字段的属性) or <code>alter table tbname add newvar varchar(30);</code>（新增字段） or <code>alter table tbname drop column oldvar;</code>（删除字段） or <code>alter table tbname change old new decimal(12,2);</code> (字段改名并改变属性) or <code>alter table oldtbname rename newtbname</code>(表改名)<br>modify和change不改变字段的相对顺序，add默认加在最后，但是可以是用<code>alter table tbname add newvar after oldvar</code>来指定插入位置</li>
+<li>insert一次插入多条数据<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tablename (field1,field2) VALUES</span><br><span class="line">(value1,value2),</span><br><span class="line">(value1,value2),</span><br><span class="line">(value1,value2),</span><br><span class="line">...;</span><br></pre></td></tr></tbody></table></figure></li>
+<li>limit m,n<br><code>select * from job order by salary desc limit 2,3</code> 从第二条记录开始的三条记录</li>
+<li>count(1) count(colname) count(*)</li>
+</ol>
+<ul>
+<li>count(1) 忽略所有列，用1代表每一行，不会忽略值为null</li>
+<li>count(*) 包括所有列，不会忽略值为null</li>
+<li>count(colname) 会忽略该字段中值为null的行</li>
+</ul>
+<ol start="12">
+<li>数据类型 参见 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/cxuanBlog/p/13173547.html">https://www.cnblogs.com/cxuanBlog/p/13173547.html</a></li>
+<li>其他函数<br>VERSION    返回当前数据库的版本 <code>select version()</code><br>DATABASE    返回当前数据库名<br>USER    返回当前登陆用户名<br>PASSWORD    返回字符串的加密版本<br>MD5    返回 MD5 值<br>INET_ATON(IP)    返回 IP 地址的数字表示<br>INET_NTOA(num)    返回数字代表的 IP 地址</li>
+</ol>
+<h3 id="帮助文档的使用-需要在命令行使用"><a href="#帮助文档的使用-需要在命令行使用" class="headerlink" title="帮助文档的使用 需要在命令行使用"></a>帮助文档的使用 需要在命令行使用</h3><ol>
+<li>查询所有可供查询的分类 <code>? contents</code>，从中发现更多可以？的内容</li>
+<li>查询关于权限管理的命令 <code>? account management</code></li>
+<li>查询关于数据类型 <code>? data types</code></li>
+<li>查询关于任何命令 <code>? [command]</code></li>
+</ol>
+<h3 id="Mysql-高级内容"><a href="#Mysql-高级内容" class="headerlink" title="Mysql 高级内容"></a>Mysql 高级内容</h3><ol>
+<li>死锁：<br>死锁的概念：<br>在两个或多个并发进程中，如果每个进程持有某种资源而又都等待别的进程释放它或它们现在保持着的资源，在未改变这种状态之前都不能向前推进，称这一组进程产生了死锁<br>通俗地讲，就是两个或多个进程被无限期地阻塞、相互等待的一种状态<br>死锁产生的原因主要是：<br>　　 1.系统资源不足<br>　　 2.进程推进顺序非法<br>产生死锁的必要条件：<br>　　（1）互斥（mutualexclusion），一个资源每次只能被一个进程使用<br>　　（2）不可抢占（nopreemption），进程已获得的资源，在未使用完之前，不能强行剥夺<br>　　（3）占有并等待（hold andwait），一个进程因请求资源而阻塞时，对已获得的资源保持不放<br>　　（4）环形等待（circularwait），若干进程之间形成一种首尾相接的循环等待资源关系。<br>这四个条件是死锁的必要条件，只要系统发生死锁，这些条件必然成立，而只要上述条件之一不满足，就不会发生死锁。<br>死锁的解除与预防：<br>理解了死锁的原因，尤其是产生死锁的四个必要条件，就可以最大可能地避免、预防和解除死锁。<br>在系统设计、进程调度等方面注意如何不让这四个必要条件成立，如何确定资源的合理分配算法，避免进程永久占据系统资源。<br>此外，也要防止进程在处于等待状态的情况下占用资源。因此，对资源的分配要给予合理的规划。足，就不会发生死锁。<br>其中最简单的方法就是线程都是以同样的顺序加锁和释放锁，也就是破坏了第四个条件。</li>
+</ol>
+<hr>
+<ol start="2">
+<li>事务和事务表<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/H_Rhui/article/details/96917915">https://blog.csdn.net/H_Rhui/article/details/96917915</a><br>MySQL 事务主要用于处理操作量大，复杂度高的数据。比如说，在人员管理系统中，你删除一个人员，你即需要删除人员的基本资料，也要删除和该人员相关的信息，如信箱，文章等等，这样，这些数据库操作语句就构成一个事务！<br>最常见的两种数据库引擎： Innodb 数据库引擎的数据库或表支持事务；MyISAM存储引擎的数据库或表不支持事务。<br>事务处理可以用来维护数据库的完整性，保证成批的 SQL 语句要么全部执行，要么全部不执行。<br>事务用来管理 insert,update,delete 语句<br>一般来说，事务是必须满足4个条件（ACID）：原子性（Atomicity，或称不可分割性）、一致性（Consistency）、隔离性（Isolation，又称独立性）、持久性（Durability）。</li>
+</ol>
+<p><strong>原子性</strong>：一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。<br><strong>一致性</strong>：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性地完成预定的工作。<br><strong>隔离性</strong>：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（Read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable）。<br><strong>持久性</strong>：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。</p>
+<ul>
+<li>事务表和非事务表<br>事务表故名思义就是支持事务的表，支不支持事务和 MySQL 的存储类型有关，一般情况下，InnoDB 存储引擎的表是支持事务的，关于 InnoDB 的知识，我们会在后面详细介绍。<br>非事务表相应的就是不支持事务的表，在 MySQL 中，存储引擎 MyISAM 是不支持事务的，非事务表的特点是不支持回滚。<br>SHOW ENGINES; 可检查mysqld服务器支持的存储引擎：<br>SHOW VARIABLES LIKE ‘have_%’; 可检查与你感兴趣的存储引擎有关的变量值</li>
+</ul>
+<hr>
+<ol start="3">
+<li>锁定语句<br>我们知道，MyISAM 和 MEMORY 存储引擎支持表级锁定(table-level locking)，InnoDB 存储引擎支持行级锁定(row-level locking)，BDB 存储引擎支持页级锁定(page-level locking)。各个锁定级别的特点如下:</li>
+</ol>
+<ul>
+<li>页级锁：销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般</li>
+<li>表级锁：表级锁是对整张表进行加锁，MyISAM 和 MEMORY 主要支持表级锁，表级锁加锁快，不会出现死锁，锁的粒度比较粗，并发度最低</li>
+<li>行级锁：行级锁可以说是 MySQL 中粒度最细的一种锁了，InnoDB 支持行级锁，行级锁容易发生死锁，并发度比较好，同时锁的开销也比较大。</li>
+</ul>
+<p><strong>锁定语句</strong><br>MySQL 的锁定语句主要有两个 Lock 和 unLock，Lock Tables 可用于锁定当前线程的表，就跟 Java 语法中的 Lock 锁的用法是一样的，如果表锁定，意味着其他线程不能再操作表，直到锁定被释放为止。<br><code>lock table cxuan005 read;</code> 锁定了cxuan005表的read锁，此时我们在另一个线程仍能进行查询，但是不能再update该表<br><strong>解锁语句</strong><br><code>unlock tables;</code>，在解锁完成前，之前进行更新的线程会一直等待，直到解锁完成后，才会进行更新。</p>
+<hr>
+<ol start="4">
+<li>为什么行级锁容易死锁而表级锁不容易死锁</li>
+</ol>
+<hr>
+<ol start="5">
+<li>事务控制<br>事务(Transaction) 是访问和更新数据库的基本执行单元，一个事务中可能会包含多个 SQL 语句，事务中的这些 SQL 语句要么都执行，要么都不执行，而 MySQL 它是一个关系型数据库，它自然也是支持事务的。事务同时也是区分关系型数据库和非关系型数据库的一个重要的方面。<br>在 MySQL 事务中，主要涉及的语法包含 SET AUTOCOMMIT、START TRANSACTION、COMMIT 和 ROLLBACK 等。</li>
+</ol>
+<ul>
+<li><p>在mysql中，事务默认是自动提交的，可以通过<code>show variables like 'autocommit';</code>来检查。在该模式下，每个SQL语句都会当作一个事务执行操作<br><code>set autocommit=0;</code>可以关闭自动提交，反之set等于1，则开启自动提交。<br>Note：这里注意一下特殊操作。在 MySQL 中，存在一些特殊的命令，如果在事务中执行了这些命令，会马上强制执行 commit 提交事务；比如 DDL 语句(create table/drop table/alter/table)、lock tables 语句等等。不过，常用的 select、insert、update 和 delete命令，都不会强制提交事务。</p>
+</li>
+<li><p>手动提交</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">start transaction;</span><br><span class="line">    # 一条或多条语句</span><br><span class="line">commit;</span><br></pre></td></tr></tbody></table></figure>
+<p>上面代码中的 start transaction 就是事务的开始语句，编写 SQL 后会调用 commit 提交事务，然后将事务统一执行，如果 SQL 语句出现错误会自动调用 Rollback 进行回滚。<br>如果不commit的话，则在另一个线程，我们是看不到在当前线程下的更新的。<br>除了 commit 之外，MySQL 中还有 commit and chain 命令，这个命令会提交当前事务并且重新开启一个新的事务。如下代码所示</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">start transaction; # 开启一个新的事务</span><br><span class="line">insert into cxuan005(id,info) values (555,'cxuan005'); # 插入一条数据</span><br><span class="line">commit and chain; # 提交当前事务并重新开启一个事务</span><br></pre></td></tr></tbody></table></figure>
+<p>上面是一个事务操作，在 commit and chain 键入后，我们可以再次执行 SQL 语句</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">update cxuan005 set info = 'cxuan' where id = 555;</span><br><span class="line">commit;</span><br></pre></td></tr></tbody></table></figure>
+<p>然后再次查询<code>select * from cxuan005;</code><br>执行后，可以发现，我们仅仅使用了一个 start transaction 命令就执行了两次事务操作。<br>如果在手动提交的事务中，你发现有一条 SQL 语句写的不正确或者有其他原因需要回滚，那么此时你就会用到 rollback 语句，它会回滚当前事务，相当于什么也没发生。如下代码所示。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">start transaction;</span><br><span class="line">delete from cxuan005 where id = 555;</span><br><span class="line">rollback;</span><br></pre></td></tr></tbody></table></figure>
+<p>这样这个delete就像没发生过一样。注意，只有没commit的事务可以被rollback，一旦commit事务，则无法rollback</p>
+</li>
+<li><p>savepoint<br>SAVEPOINT，它能指定事务回滚的一部分，但是不能指定事务提交的一部分。 SAVEPOINT 可以指定多个，在满足不同条件的同时，回滚不同的 SAVEPOINT。需要注意的是，如果定义了两个相同名称的 SAVEPOINT，则后面定义的 SAVEPOINT 会覆盖之前的定义。如果 SAVEPOINT 不再需要的话，可以通过 RELEASE SAVEPOINT 来进行删除。删除后的 SAVEPOINT 不能再执行 ROLLBACK TO SAVEPOINT 命令。<br>我们通过一个示例来进行模拟不同的 SAVEPOINT,首先先启动一个事务 ，向 cxuan005 中插入一条数据，然后进行查询，那么是可以查询到这条记录的</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">start transaction;</span><br><span class="line">insert into cxuan005(id,info) values(666,'cxuan666');</span><br><span class="line">select * from cxuan005 where id = 666;</span><br></pre></td></tr></tbody></table></figure>
+<p>然后我们定义一个 SAVEPOINT,<code>savepoint test;`` 然后继续插入一条记录,</code>insert into cxuan005(id,info) values(777,’cxuan777’);<code> 此时就可以查询到两条新增记录了，id 是 666 和 777 的记录。 那么我们可以回滚到刚刚定义的 SAVEPOINT，通过`rollback to savepoint test;</code><br>再次查询 cxuan005 这个表，可以看到，只有 id=666 的这条记录插入进来了，说明 id=777 这条记录已经被回滚了。然后我们可以commit，提交这个事务。</p>
+</li>
+</ul>
+<hr>
+<ol start="6">
+<li>SQL mode<br>SQL Mode 可以解决下面这几种问题</li>
+</ol>
+<ul>
+<li>通过设置 SQL Mode，可以完成不同严格程度的数据校验，有效保障数据的准确性。</li>
+<li>设置 SQL Mode 为 ANSI 模式，来保证大多数 SQL 符合标准的 SQL 语法，这样应用在不同数据库的迁移中，不需要对 SQL 进行较大的改变</li>
+<li>数据在不同数据库的迁移中，通过改变 SQL Mode 能够更方便的进行迁移<br>通过<code>select @@sql_mode</code>来查看默认的SQL mode</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>SQL mode</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ONLY_FULL_GROUP_BY</td>
+<td>这个模式会对 GROUP BY 进行合法性检查，对于 GROUP BY 操作，如果在SELECT 中的列，没有在 GROUP BY 中出现，那么将认为这个 SQL 是不合法的，因为列不在 GROUP BY 从句中</td>
+</tr>
+<tr>
+<td>STRICT_TRANS_TABLES</td>
+<td>这就是严格模式，在这个模式下会对数据进行严格的校验，错误数据不能插入，报error 错误。如果不能将给定的值插入到事务表中，则放弃该语句。对于非事务表，如果值出现在单行语句或多行语句的第1行，则放弃该语句。</td>
+</tr>
+<tr>
+<td>NO_ZERO_IN_DATE</td>
+<td>这个模式影响着日期中的月份和天数是否可以为 0（注意年份是非 0 的），这个模式也取决于严格模式是否被启用。如果这个模式未启用，那么日期中的零部分被允许并且插入没有警告。如果这个模式启用，那么日期中的零部分插入被作为 0000-00-00 并且产生一个警告。这个模式需要注意下，如果启用的话，需要 STRICT_TRANS_TABLES 和 NO_ZERO_IN_DATE 同时启用，否则不起作用，也就是set session sql_mode=’STRICT_TRANS_TABLES,NO_ZERO_IN_DATE’;</td>
+</tr>
+<tr>
+<td>ERROR_FOR_DIVISION_BY_ZERO</td>
+<td>如果这个模式未启用，那么零除操作将会插入空值并且不会产生警告；如果这个模式启用，零除操作插入空值并产生警告；如果这个模式和严格模式都启用，零除从操作将会产生一个错误。</td>
+</tr>
+<tr>
+<td>NO_AUTO_CREATE_USER</td>
+<td>禁止使用 grant 语句自动创建用户，除非认证信息被指定。</td>
+</tr>
+<tr>
+<td>NO_ENGINE_SUBSTITUTION</td>
+<td>此模式指定当执行 create 语句或者 alter 语句指定的存储引擎没有启用或者没有编译时，控制默认存储引擎的自动切换。默认是启用状态的。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>修改SQL mode<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<ol start="7">
+<li>SQL mode的作用域<br>SQL Mode 按作用区域和时间可分为3个级别，分别是会话级别，全局级别，配置（永久生效）级别。</li>
+</ol>
+<p>我们上面使用的 SQL Mode 都是 会话级别，会话级别就是当前窗口域有效。它的设置方式是</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set @@session.sql_mode='xx_mode'</span><br><span class="line">set session sql_mode='xx_mode'</span><br></pre></td></tr></tbody></table></figure>
+<p>全局域就是当前会话关闭不失效，但是在 MySQL 重启后失效。它的设置方式是</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set global sql_mode='xx_mode';</span><br><span class="line">set @@global.sql_mode='xx_mode';</span><br></pre></td></tr></tbody></table></figure>
+<p>配置域就是在 vi /etc/my.cnf 里面添加</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">sql-mode = "xx_mode"</span><br></pre></td></tr></tbody></table></figure>
+<p>配置域在保存退出后，重启服务器，即可永久生效。</p>
+<hr>
+<ol start="8">
+<li>mysql正则表示式</li>
+</ol>
+<ul>
+<li>* 0或多个字符串</li>
+<li>+ 1或多个字符串</li>
+<li>? 0或1个字符串</li>
+<li>. 匹配任意单个字符</li>
+<li>^ 匹配头</li>
+<li>$ 匹配尾</li>
+<li>[…] 表示匹配括号内的任意字符</li>
+<li>[^…] 匹配括号内不包含的任意字符，和 […] 是相反的<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select 'ourstring' regexp 'regular expr'</span><br></pre></td></tr></tbody></table></figure>
+具体见 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/cxuanBlog/p/14328628.html">https://www.cnblogs.com/cxuanBlog/p/14328628.html</a></li>
+</ul>
+<hr>
+<ol start="9">
+<li>group by + with roll up: 增加总结行<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/guo_ridgepole/article/details/81609810">https://blog.csdn.net/guo_ridgepole/article/details/81609810</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42254088/article/details/81904819">https://blog.csdn.net/qq_42254088/article/details/81904819</a><figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select sex, count(*) as tot from user group by sex</span><br><span class="line">每个性别一条记录，总共两条记录</span><br><span class="line">select sex, count(*) as tot from user group by sex with roll up</span><br><span class="line">会多一个总人数</span><br><span class="line">select sex, count(*) as tot from user group by sex, dep with roll up</span><br><span class="line">除了总人数，每个sex会有一个总人数，比没有roll up多三条记录</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<hr>
+<ol start="10">
+<li>外键问题<br>InnoDB 存储引擎是支持外键的，而 MyISAM 存储引擎是不支持外键的，因此在 MyISAM 中设置外键会不起作用。</li>
+</ol>
+<hr>
+<ol start="11">
+<li>表名大小写问题<br>见 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/cxuanBlog/p/14328628.html">https://www.cnblogs.com/cxuanBlog/p/14328628.html</a></li>
+</ol>
+<hr>
+<h3 id="mysql-进阶"><a href="#mysql-进阶" class="headerlink" title="mysql 进阶"></a>mysql 进阶</h3><ol>
+<li>存储引擎<br>MySQL 默认支持多种存储引擎，来适用不同数据库应用，用户可以根据需要选择合适的存储引擎，下面是 MySQL 支持的存储引擎<br>MyISAM, InnoDB, BDB, MEMORY, MERGE, EXAMPLE, NDB Cluster, ARCHIVE, CSV, BLACKHOLE, FEDERATED<br>默认情况下，如果创建表不指定存储引擎，会使用默认的存储引擎，如果要修改默认的存储引擎，那么就可以在参数文件中设置 default-table-type。<br><code>show engines</code> 可以查询当前数据库支持的存储引擎<br>在创建新表的时候，可以通过增加ENGINE关键字来设置新建表的存储引擎，<code>create table new(id int(10), name varchar(20)) engine = MyISAM</code><br>如果不知道已有表的存储引擎，可以使用<code>show create table tbname</code>来查看<br>如果想要更换引擎，可以使用<code>alter table tbname engine = myisam;</code></li>
+</ol>
+<hr>
+<ol start="2">
+<li>一些存储引擎的特点</li>
+</ol>
+<ul>
+<li><p>MyISAM<br>在 5.1 版本之前，MyISAM 是 MySQL 的默认存储引擎，MyISAM 并发性比较差，使用的场景比较少，主要特点是</p>
+<ul>
+<li>不支持事务操作，ACID 的特性也就不存在了，这一设计是为了性能和效率考虑的。</li>
+<li>不支持外键操作，如果强行增加外键，MySQL 不会报错，只不过外键不起作用。</li>
+<li>MyISAM 默认的锁粒度是表级锁，所以并发性能比较差，加锁比较快，锁冲突比较少，不太容易发生死锁的情况。</li>
+<li>MyISAM 会在磁盘上存储三个文件，文件名和表名相同，扩展名分别是 .frm(存储表定义)、.MYD(MYData,存储数据)、MYI(MyIndex,存储索引)。这里需要特别注意的是 MyISAM 只缓存索引文件，并不缓存数据文件。</li>
+<li>MyISAM 支持的索引类型有 全局索引(Full-Text)、B-Tree 索引、R-Tree 索引<ul>
+<li>Full-Text 索引：它的出现是为了解决针对文本的模糊查询效率较低的问题。</li>
+<li>B-Tree 索引：所有的索引节点都按照平衡树的数据结构来存储，所有的索引数据节点都在叶节点</li>
+<li>R-Tree索引：它的存储方式和 B-Tree 索引有一些区别，主要设计用于存储空间和多维数据的字段做索引,目前的 MySQL 版本仅支持 geometry 类型的字段作索引，相对于 BTREE，RTREE 的优势在于范围查找。</li>
+</ul>
+</li>
+<li>数据库所在主机如果宕机，MyISAM 的数据文件容易损坏，而且难以恢复。</li>
+<li>增删改查性能方面：SELECT 性能较高，<strong>适用于查询较多的情况</strong></li>
+</ul>
+</li>
+<li><p>InnoDB<br>自从 MySQL 5.1 之后，默认的存储引擎变成了 InnoDB 存储引擎，相对于 MyISAM，InnoDB 存储引擎有了较大的改变，它的主要特点是</p>
+<ul>
+<li>支持事务操作，具有事务 ACID 隔离特性，默认的隔离级别是可重复读(repetable-read)、通过MVCC（并发版本控制）来实现的。能够解决脏读和不可重复读的问题。</li>
+<li>InnoDB 支持外键操作。</li>
+<li>InnoDB 默认的锁粒度行级锁，并发性能比较好，会发生死锁的情况。</li>
+<li>和 MyISAM 一样的是，InnoDB 存储引擎也有 .frm文件存储表结构 定义，但是不同的是，InnoDB 的表数据与索引数据是存储在一起的，都位于 B+ 数的叶子节点上，而 MyISAM 的表数据和索引数据是分开的。</li>
+<li>InnoDB 有安全的日志文件，这个日志文件用于恢复因数据库崩溃或其他情况导致的数据丢失问题，保证数据的一致性。</li>
+<li>InnoDB 和 MyISAM 支持的索引类型相同，但具体实现因为文件结构的不同有很大差异。</li>
+<li>增删改查性能方面，<strong>如果执行大量的增删改操作</strong>，推荐使用 InnoDB 存储引擎，它在删除操作时是<strong>对行删除，不会重建表</strong>。</li>
+</ul>
+</li>
+<li><p>MEMORY<br>MEMORY 存储引擎使用存在内存中的内容来创建表。每个 MEMORY 表实际只对应一个磁盘文件，格式是 .frm。MEMORY 类型的表访问速度很快，因为其数据是存放在内存中。<strong>默认使用 HASH 索引</strong>。</p>
+</li>
+<li><p>MERGE<br>MERGE 存储引擎是一组 MyISAM 表的组合，MERGE 表本身没有数据，对 MERGE 类型的表进行查询、更新、删除的操作，实际上是对内部的 MyISAM 表进行的。MERGE 表在磁盘上保留两个文件，一个是 .frm 文件存储表定义、一个是 .MRG 文件存储 MERGE 表的组成等。</p>
+</li>
+</ul>
+<hr>
+<ol start="3">
+<li>合适引擎的选择<br>在实际开发过程中，我们往往会根据应用特点选择合适的存储引擎。</li>
+</ol>
+<ul>
+<li>MyISAM：如果应用程序通常<strong>以检索为主，只有少量的插入、更新和删除操作</strong>，并且对事物的完整性、并发程度不是很高的话，通常建议选择 MyISAM 存储引擎。</li>
+<li>InnoDB：如果使用到<strong>外键</strong>、需要<strong>并发</strong>程度较高，数据<strong>一致性</strong>要求较高，那么通常选择 InnoDB 引擎，一般互联网大厂对并发和数据完整性要求较高，所以一般都使用 InnoDB 存储引擎。</li>
+<li>MEMORY：MEMORY 存储引擎将所有数据<strong>保存在内存中</strong>，在需要快速定位下能够提供及其迅速的访问。MEMORY 通常用于更新不太频繁的小表，用于快速访问取得结果。</li>
+<li>MERGE：MERGE 的内部是使用 MyISAM 表，MERGE 表的优点在于可以突破对单个 MyISAM 表大小的限制，并且通过将不同的表分布在多个磁盘上，可以有效地改善 MERGE 表的访问效率</li>
+</ul>
+<hr>
+<ol start="4">
+<li>合适数据类型的选择<br>见 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkwMDE1MzkwNQ==&amp;mid=2247495882&amp;idx=1&amp;sn=488a147b3bf3c710806ce7031e6186b5&amp;chksm=c04ae794f73d6e829f59b76657db17c50daab3633cc488629efbf05b675209a23ff96bab9f90&amp;scene=21#wechat_redirect">https://mp.weixin.qq.com/s?__biz=MzkwMDE1MzkwNQ==&amp;mid=2247495882&amp;idx=1&amp;sn=488a147b3bf3c710806ce7031e6186b5&amp;chksm=c04ae794f73d6e829f59b76657db17c50daab3633cc488629efbf05b675209a23ff96bab9f90&amp;scene=21#wechat_redirect</a></li>
+</ol>
+<hr>
+<ol start="5">
+<li>索引<br>所有的 MySQL 类型都可以进行索引，对相关列使用索引是提高 SELECT 查询性能的最佳途径。MyISAM 和 InnoDB 都是使用 BTREE 作为索引，MySQL 5 不支持函数索引，但是支持 前缀索引。<br>前缀索引顾名思义就是对列字段的前缀做索引，前缀索引的长度和存储引擎有关系。MyISAM 前缀索引的长度支持到 1000 字节，InnoDB 前缀索引的长度支持到 767 字节，索引值重复性越低，查询效率也就越高。<br>在 MySQL 中，主要有下面这几种索引</li>
+</ol>
+<ul>
+<li>全局索引(FULLTEXT)：全局索引，目前只有 MyISAM 引擎支持全局索引，它的出现是为了解决针对文本的模糊查询效率较低的问题，并且只限于 CHAR、VARCHAR 和 TEXT 列。</li>
+<li>哈希索引(HASH)：哈希索引是 MySQL 中用到的唯一 key-value 键值对的数据结构，很适合作为索引。HASH 索引具有一次定位的好处，不需要像树那样逐个节点查找，但是这种查找适合应用于查找单个键的情况，对于范围查找，HASH 索引的性能就会很低。默认情况下，MEMORY 存储引擎使用 HASH 索引，但也支持 BTREE 索引。</li>
+<li>B-Tree 索引：B 就是 Balance 的意思，BTree 是一种平衡树，它有很多变种，最常见的就是 B+ Tree，它被 MySQL 广泛使用。</li>
+<li>R-Tree 索引：R-Tree 在 MySQL 很少使用，仅支持 geometry 数据类型，支持该类型的存储引擎只有MyISAM、BDb、InnoDb、NDb、Archive几种，相对于 B-Tree 来说，R-Tree 的优势在于范围查找。<br>索引可以在创建表的时候进行创建，也可以单独创建，下面我们采用单独创建的方式，我们在 test 上创建前缀索引, <code>create index varchar_index on tbname(id)</code><br>删除索引，<code>drop index varchar_index on tbname</code></li>
+</ul>
+<p><strong>索引设计原则</strong><br>创建索引的时候，要尽量考虑以下原则，便于提升索引的使用效率。</p>
+<ul>
+<li>选择索引位置，选择索引最合适的位置是出现在 where 语句中的列，而不是 select 关键字后的选择列表中的列。</li>
+<li>选择使用唯一索引，顾名思义，唯一索引的值是唯一的，可以更快速的确定某条记录，例如学生的学号就适合使用唯一性索引，<em>而学生的性别则不适合使用，因为不管搜索哪个值，都差不多有一半的行</em>。</li>
+<li>为经常使用的字段建立索引，如果某个字段经常用作查询条件，那么这个字段的查询速度在极大程度上影响整个表的查询速度，因此为这样的字段建立索引，可以提高整个表的查询速度。</li>
+<li>不要过度索引，限制索引数目，索引的数目不是越多越好，每个索引都会占据磁盘空间，索引越多，需要的磁盘空间就越大。</li>
+<li>尽量使用前缀索引，如果索引的值很长，那么查询速度会受到影响，这个时候应该使用前缀索引，对列的某几个字符进行索引，可以提高检索效率。</li>
+<li>利用最左前缀，在创建一个 n 列的索引时，实际上是创建了 MySQL 可利用的 n 个索引。多列索引可以起到几个索引的作用，利用索引最左边的列来匹配行，这样的列称为最左前缀。</li>
+<li><strong>对于使用 InnoDB 存储引擎的表来说，记录会按照一定的顺序保存。如果有明确的主键定义，那么会按照主键的顺序进行保存；如果没有主键，但是有唯一索引，那么就按照唯一索引的顺序进行保存。如果既没有主键又没有唯一索引，那么表中会自动生成一个内部列，按照这个列的顺序进行保存。一般来说，使用主键的顺序是最快的</strong></li>
+<li>删除不再使用或者很少使用的索引</li>
+</ul>
+<hr>
+<ol start="6">
+<li>视图的基本操作<br>视图的英文名称是 view，它是一种虚拟存在的表。视图对于用户来说是透明的，它并不在数据库中实际存在，视图是使用数据库行和列动态组成的表。<br>视图相对于普通的表来说，优势包含下面这几项</li>
+</ol>
+<ul>
+<li>使用视图可以简化操作：使用视图我们不用关注表结构的定义，我们可以把经常使用的数据集合定义成视图，这样能够简化操作。</li>
+<li>安全性：用户对视图不可以随意的更改和删除，可以保证数据的安全性。</li>
+<li>数据独立性：一旦视图的结构确定了，可以屏蔽表结构变化对用户的影响， 数据库表增加列对视图没有影响；具有一定的独立性</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>创建视图</td>
+<td>create view viewname as (select …)</td>
+</tr>
+<tr>
+<td>查看视图信息</td>
+<td>show tables</td>
+</tr>
+<tr>
+<td>删除视图</td>
+<td>drop view viewname</td>
+</tr>
+<tr>
+<td>查看表结构</td>
+<td>describe viewname</td>
+</tr>
+<tr>
+<td>更新视图</td>
+<td>update viewname set …</td>
+</tr>
+</tbody></table>
+<hr>
+<ol start="7">
+<li>存储过程和函数<br>「存储过程是在数据库系统中完成一组特定功能的 SQL 语句集」，它存储在数据库系统中，<strong>一次编译后永久有效</strong>。</li>
+</ol>
+<ul>
+<li>使用存储过程具有可封装性，能够隐藏复杂的 SQL 逻辑。</li>
+<li>存储过程可以接收参数，并返回结果</li>
+<li>存储过程性能非常高，一般用于批量执行语句</li>
+<li>使用存储过程有什么缺点？</li>
+<li>存储过程编写复杂</li>
+<li>存储过程对数据库的依赖性比较强，可移植性比较差</li>
+</ul>
+<p>在认识到存储过程是什么之后，我们就来使用一下存储过程，这里需要先了解一个小技巧，也就是 delimiter 的用法，delimiter 用于自定义结束符<br>默认<code>;</code>为结束符，通过<code>delimiter $$</code>，可以将结束符定义为$$<br>建立存储过程：</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">delimiter $$</span><br><span class="line">create procedure sp_product()</span><br><span class="line">begin</span><br><span class="line">select * from product;</span><br><span class="line">end $$</span><br></pre></td></tr></tbody></table></figure>
+<p>用call调用该过程，<code>call sp_product$$</code></p>
+<p>存储过程可以接受参数，建立一个带有参数的存储过程</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">delimiter $$</span><br><span class="line">create procedure sp_product(in piid int)</span><br><span class="line">begin</span><br><span class="line">select * from product where id = pid;</span><br><span class="line">end $$</span><br></pre></td></tr></tbody></table></figure>
+<p>调用 <code>call sp_product(2)$$</code> 等价于 <code>select * from product where id=2;</code><br>存储过程删除 <code>drop procedure sp_product</code><br>存储过程查看 <code>show create procedure procname</code></p>
+<hr>
+<ol start="8">
+<li>变量级别<br>更详细的解释见 <a target="_blank" rel="noopener" href="https://www.modb.pro/db/12232">https://www.modb.pro/db/12232</a><br>首先MySQL服务器启动时会使用其软件内置的变量（俗称写死在代码中的）和配置文件中的变量（如果允许，是可以覆盖源代码中的默认值的）来初始化整个MySQL服务器的运行环境，这些变量通常就是我们所说的全局变量，这些在内存中的全局变量有些是可以修改的。<br>当有客户端连接到MySQL服务器的时候，MySQL服务器会将这些全局变量的大部分复制一份作为这个连接客户端的会话变量，这些会话变量与客户端连接绑定，连接的客户端可以修改其中允许修改的变量，但是当连接断开时这些会话变量全部消失，重新连接时会从全局变量中重新复制一份。<br>其实与连接相关的变量不只有会话变量一种，用户变量也是这样的，用户变量其实就是用户自定义变量，当客户端连接上MySQL服务器之后就可以自己定义一些变量，这些变量在整个连接过程中有效，当连接断开时，这些用户变量消失。<br>局部变量实际上最好理解，通常由DECLARE 关键字来定义，经常出现在存储过程中，非常类似于C和C++函数中的局部变量，而存储过程的参数也和这种变量非常相似，基本上可以作为同一种变量来对待。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>变量类别</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户变量</td>
+<td>用户变量是基于会话变量实现的，可以暂存，用户变量与连接有关，也就是说一个客户端定义的变量不能被其他客户端使用看到。当客户端退出时，链接会自动释放。我们可以使用 set 语句设置一个变量<code>set @myid = 'xxx'</code>，然后查询我们刚刚设置的用户变量<code>select @myid;</code> 用户变量是和客户端有关系，当我们退出后，这个变量会自动消失，现在我们退出客户端,当我们重新登陆客户端，再次使用 select 条件查询时，发现这个变量已经自动消失了</td>
+</tr>
+<tr>
+<td>会话变量</td>
+<td>服务器会为每个连接的客户端维护一个会话变量。可以使用<code>show session vaiables;</code>来显示所有会话变量，用<code>set session auto_increment_increment=1;</code>或者<code>set @@session.auto_increment_increment=2;</code>或者<code>set local auto_increment_increment=1;</code>手动设置会话变量，查询会话变量使用<code>select@@session.auto_increment_increment;</code>或者<code>select @@auto_increment_increment;</code>或者<code>select @@local.auto_increment_increment</code>，查询所有的会话变量 <code>show session variables (like '%sql'')</code></td>
+</tr>
+<tr>
+<td>局部变量</td>
+<td>MySQL 中的局部变量与 Java 很类似 ，Java 中的局部变量是 Java 所在的方法或者代码块，而 MySQL 中的局部变量作用域是<strong>所在的存储过程</strong>。MySQL 局部变量使用 declare 来声明。查询可使用select，<code>declare count int(4);select count;</code>,也可以使用select into 来设置值<code>select count(id) into count from items where price &lt; 99;</code></td>
+</tr>
+<tr>
+<td>全局变量</td>
+<td>当服务启动时，它将所有全局变量初始化为默认值，其作用域为server的整个生命周期。用<code>show global variables;</code>来查看全局变量，用<code>set global sql_warning=ON;</code>或者<code>set @@global.sql_warning=OFF;</code>，查询全局变量，则可以使用<code>select @@global.sql_warnings;</code>或者<code>show global variables like '%sql_warnings%'</code>, 查询所有的全局变量 <code>show global variables (like '%sql'')</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li>select@@变量名这种形式默认取的是会话变量，如果查询的会话变量不存在就会获取全局变量，比如@@max_connections</li>
+<li>但是SET操作的时候，set @@变量名=xxx 总是操作的会话变量，如果会话变量不存在就会报错</li>
+</ul>
+<hr>
+<ol start="9">
+<li>触发器 Trigger<br>触发器一般作用在表上，在满足定义条件时触发，并执行触发器中定义的语句集合，下面我们就来一起认识一下触发器。<br>举个例子来认识一下触发器：比如你有一个日志表和金额表，你每录入一笔金额就要进行日志表的记录，你会怎么样？同时在金额表和日志表插入数据吗？如果有了触发器，你可以直接在金额表录入数据，日志表会自动插入一条日志记录，当然，触发器不仅只有新增操作，还有更新和删除操作。</li>
+</ol>
+<ul>
+<li>触发器的创建<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create trigger triggername triggertime triggerevent on tbname for each row triggerstmt</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>triggername：这个指的就是触发器的名字</li>
+<li>triggertime：这个指的就是触发器触发时机，是 BEFORE 还是 AFTER</li>
+<li>triggerevent: 这个指的就是触发器触发事件，一共有三种事件：「INSERT、UPDATE 或者 DELETE」。</li>
+<li>tbname：这个参数指的是触发器创建的表名，在哪个表上创建</li>
+<li>triggerstmt: 触发器的程序体，也就是 SQL 语句<br>所以，可以创建六种触发器「BEFORE INSERT、AFTER INSERT、BEFORE UPDATE、AFTER UPDATE、BEFORE DELETE、AFTER DELETE」, 上面的 for each now 表示任何一条记录上的操作都会触发触发器。</li>
+</ul>
+</li>
+<li>删除触发器：<code>drop triggger tgname</code></li>
+<li>查看触发器的状态：<code>show triggers</code> or 查询<code>information_schema.triggers</code></li>
+<li>触发器的限制：触发程序不能调用将数据返回客户端的存储程序。也不能使用 CALL 语句的动态 SQL 语句。不能在触发器中开始和结束语句，例如 START TRANSACTION</li>
+<li>example<br>已有一个product表，希望每次product有新加入的行，相应的在product_info表中加入行<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table product_info(pinfo varchar(20)); #建表</span><br><span class="line"># 创建trigger</span><br><span class="line">create trigger tg_info</span><br><span class="line">after insert on product for each row</span><br><span class="line">begin</span><br><span class="line">insert into product_info values('insert after inserting into product')</span><br><span class="line">end $$</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cxuanBlog/p/13173547.html">https://www.cnblogs.com/cxuanBlog/p/13173547.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/cxuanBlog/p/14328628.html">https://www.cnblogs.com/cxuanBlog/p/14328628.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzkwMDE1MzkwNQ==&amp;mid=2247495882&amp;idx=1&amp;sn=488a147b3bf3c710806ce7031e6186b5&amp;chksm=c04ae794f73d6e829f59b76657db17c50daab3633cc488629efbf05b675209a23ff96bab9f90&amp;scene=21#wechat_redirect">https://mp.weixin.qq.com/s?__biz=MzkwMDE1MzkwNQ==&amp;mid=2247495882&amp;idx=1&amp;sn=488a147b3bf3c710806ce7031e6186b5&amp;chksm=c04ae794f73d6e829f59b76657db17c50daab3633cc488629efbf05b675209a23ff96bab9f90&amp;scene=21#wechat_redirect</a></li>
+</ul>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/SQL/">#SQL</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/09/10/sql-improvement-practice/">SQL调优实战</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/09/06/sql-improvement-2/">SQL调优和注意事项（下）</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 Morgan Y&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+</body>
+</html>
