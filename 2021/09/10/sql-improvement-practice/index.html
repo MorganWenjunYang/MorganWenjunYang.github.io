@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>SQL调优实战 - Morgan Freewoman</title>
+<title>SQL调优实践 - Morgan Freewoman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -70,7 +70,7 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            SQL调优实战
+            SQL调优实践
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            a minute read (About 113 words)
+            11 minutes read (About 1642 words)
         </span>
         
     </div>
@@ -92,6 +92,76 @@
     
         <html><head></head><body><p>还记得之前做的docker部署flask的项目，好久不看，发现云上mysql已经存下了爬下来好多微博数据。之前的建表非常简单，几乎没有去考虑加索引去优化，随着数据越来越多，问题逐渐暴露出来。正好最近也在学习sql调优的知识，是个不错的练习机会。Let’s do this！</p>
 <span id="more"></span>
+
+<p>如何通过索引调优sql，在前面的文章中已经设计了，在本篇中里我们首先based on 程序员cxuan的<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000040145951">这篇文章</a>做一些其他方面调优的总结。</p>
+<ol>
+<li>通过 show status 命令了解SQL执行次数<br>show status 命令会显示每个服务器变量 variable_name 和 value，状态变量是只读的。如果使用 SQL 命令，可以使用 like 或者 where 条件来限制结果。like 可以对变量名做标准模式匹配, <code>show status like 'Com_%'</code>。</li>
+</ol>
+<p>Com_xxx 表示的是每个 xxx 语句执行的次数，我们通常关心的是 select 、insert 、update、delete 语句的执行次数，即</p>
+<pre><code>Com_select：执行 select 操作的次数，一次查询会使结果 + 1。
+Com_insert：执行 INSERT 操作的次数，对于批量插入的 INSERT 操作，只累加一次。
+Com_update：执行 UPDATE 操作的次数。
+Com_delete：执行 DELETE 操作的次数。
+</code></pre>
+<p>以 Innodb_ 为开头的参数主要有</p>
+<pre><code>Innodb_rows_read：执行 select 查询返回的行数。
+Innodb_rows_inserted：执行 INSERT 操作插入的行数。
+Innodb_rows_updated：执行 UPDATE 操作更新的行数。
+Innodb_rows_deleted：执行 DELETE 操作删除的行数。
+</code></pre>
+<p>通过上面这些参数执行结果的统计，我们能够大致了解到当前数据库是以更新（包括插入、删除）为主还是查询为主。<br>除此之外，还有一些其他参数用于了解数据库的基本情况。</p>
+<pre><code>Connections：查询 MySQL 数据库的连接次数，这个次数是不管连接是否成功都算上。
+Uptime：服务器的工作时间。
+Slow_queries：满查询次数。
+Threads_connected：查看当前打开的连接的数量。
+</code></pre>
+<p>下面这个博客汇总了几乎所有 show status 的参数，可以当作参考手册。<a target="_blank" rel="noopener" href="https://blog.csdn.net/ayay_870621/article/details/88633092">https://blog.csdn.net/ayay_870621/article/details/88633092</a></p>
+<ol start="2">
+<li>查看线程<code>show processlist</code>，具体解读见cxuan<br>命令详解见 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_34357436/article/details/91768402">https://blog.csdn.net/weixin_34357436/article/details/91768402</a></li>
+<li>索引详情见cxuan</li>
+<li>查看索引的使用情况<br>在 MySQL 索引的使用过程中，有一个 Handler_read_key 值，这个值表示了某一行被索引值读的次数。 Handler_read_key 的值比较低的话，则表明增加索引得到的性能改善不是很理想，可能索引使用的频率不高。<br>还有一个值是 Handler_read_rnd_next，这个值高则意味着查询运行效率不高，应该建立索引来进行抢救。这个值的含义是在数据文件中读下一行的请求数。如果正在进行大量的表扫描，Handler_read_rnd_next 的值比较高，就说明表索引不正确或写入的查询没有利用索引。</li>
+</ol>
+<hr>
+<h2 id="正式开始解决问题"><a href="#正式开始解决问题" class="headerlink" title="正式开始解决问题"></a>正式开始解决问题</h2><p>当前hotsearch表的结构如下</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `hotsearch` (</span><br><span class="line">  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `topic` varchar(50) NOT NULL,</span><br><span class="line">  `entry_time` datetime NOT NULL,</span><br><span class="line">  `last_update` datetime NOT NULL,</span><br><span class="line">  `peak_rank` int(11) NOT NULL,</span><br><span class="line">  `peak_read` int(11) NOT NULL,</span><br><span class="line">  `cover_cnt` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=7465 DEFAULT CHARSET=utf8</span><br></pre></td></tr></tbody></table></figure>
+
+<p>id没有必要使用bigint(20)，且peak_rank和cover_cnt也没有必要使用int(11)，在初始设计上，这些就占用了太多的空间</p>
+<hr>
+<p>所有可能的用到的sql语句都在db.py当中，我们简单的整理一下<br>对于新抓取的数据</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#1</span><br><span class="line">select topic from hotsearch where DATE(last_update)=CURDATE() or DATE(last_update)=CURRENT_DATE()-1</span><br><span class="line"></span><br><span class="line">#2</span><br><span class="line">insert into hotsearch(topic, entry_time, last_update, peak_rank, peak_read, cover_cnt)</span><br><span class="line">values(%s,%s,%s,%s,%s,%s)"</span><br><span class="line"></span><br><span class="line">#3</span><br><span class="line">update hotsearch</span><br><span class="line">    set last_update= %s,</span><br><span class="line">    peak_rank=CASE when peak_rank &lt; %s then peak_rank else %s END,</span><br><span class="line">    peak_read=CASE when peak_read &gt; %s then peak_read else %s END,</span><br><span class="line">    cover_cnt = cover_cnt+1 WHERE topic = %s</span><br></pre></td></tr></tbody></table></figure>
+<p>update操作，如果在topic上有所有可能会加快<br>select操作即使在last_update上建立索引，也会因为DATE函数和or导致索引失效，用explain检测发现确实如此，type为ALL表示全表搜索</p>
+<hr>
+<p>取得基本数据</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#4</span><br><span class="line">sql1 = "select count(*) from weibo.hotsearch"</span><br><span class="line">#5</span><br><span class="line">sql2 = "select count(*) from hotsearch where DATE(entry_time) = CURDATE()"</span><br><span class="line">#6</span><br><span class="line">sql3 = "select last_update from hotsearch order by last_update desc limit 1"</span><br><span class="line">#7</span><br><span class="line">sql4 = "select DATEDIFF( CURDATE(), (select DATE(last_update) from hotsearch order by last_update limit 1))+1"</span><br></pre></td></tr></tbody></table></figure>
+<p>直接用max/min来完成6、7的工作</p>
+<hr>
+<p>流行话题</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#8</span><br><span class="line">select topic, peak_read</span><br><span class="line">from hotsearch</span><br><span class="line">where DATEDIFF(DATE(entry_time),CURDATE())&lt;=30</span><br><span class="line">order by peak_read desc</span><br><span class="line">limit 10</span><br></pre></td></tr></tbody></table></figure>
+<p>entry_time上也可以加上索引，同时可以把datadiff的公式transform成curdate-30</p>
+<hr>
+<p>词云</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#9</span><br><span class="line">select topic, peak_read</span><br><span class="line">from hotsearch</span><br><span class="line">where DATEDIFF(DATE(entry_time),CURDATE())&lt;=30</span><br><span class="line">order by peak_read desc</span><br><span class="line">limit 50</span><br></pre></td></tr></tbody></table></figure>
+<p>同上</p>
+<hr>
+<p>按标题搜索/按日期搜索</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#10</span><br><span class="line">select topic, peak_read, peak_rank, entry_time, last_update</span><br><span class="line">from hotsearch</span><br><span class="line">where topic like '%keyword%'</span><br><span class="line">order by peak_read desc</span><br><span class="line"></span><br><span class="line">#11</span><br><span class="line">select topic, peak_read, peak_rank, entry_time, last_update</span><br><span class="line">from hotsearch</span><br><span class="line">where date(entry_time) &lt;= date(\'" + edt + "\') and</span><br><span class="line">date(entry_time) &gt;= date(\'" + std + "\')</span><br><span class="line">order by peak_read desc "</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<ul>
+<li><p>调整表的结构使之更加节省空间</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alter table `hotsearch` modify id INT(8);</span><br><span class="line">alter table `hotsearch` modify peak_rank TINYINT;</span><br><span class="line">alter table `hotsearch` modify cover_cnt INT(4)</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>在entry_time和last_update上新建索引</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create index entry_idx on hotsearch(entry_time)</span><br><span class="line">create index update_idx on hotsearch(last_update)</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>change #1 to the following，我们用explain会发现type从all变成了range，该查询利用了update_idx这个索引，这里千万不能CURRENT_DATE()-1，比如现在日期是2021-09-01，直接减一会得到20210900</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from hotsearch where last_update between date_sub(CURRENT_DATE(), INTERVAL 1 DAY) and CURRENT_DATE()</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>explain #5后发现，该句无需改动，直接可以运用entry_time上的索引entry_idx，查询type为index，index与ALL区别为index类型只遍历索引树，这通常比ALL快，因为索引文件通常比数据文件小，也就是说虽然ALL和Index都是读全表，但Index是从索引中读取的，而ALL都是从磁盘中读的。但是如果改为一下语句，则可以升级为range。</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select count(id) from hotsearch where entry_time &gt;=  CURRENT_DATE()</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>#6 改为<code>select max(last_update) from hotsearch </code>, type由index变为NULL</p>
+</li>
+<li><p>#7 改为<code>select DATEDIFF( CURDATE(), (select DATE(min(last_update)) from hotsearch))+1</code>, type由内层index、外层NULL，变为内外均为NULL</p>
+</li>
+<li><p>#8 #9做类似修改</p>
+</li>
+</ul>
 </body></html>
     
     </div>
@@ -104,7 +174,9 @@
     
     
     <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/09/12/style-transfer/">风格迁移</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">

@@ -71,6 +71,47 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
+            <a href="/2021/08/06/flask-docker/" itemprop="url">用Docker部署Flask到阿里云</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-08-06T13:39:33.000Z" itemprop="datePublished">Aug 6 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            12 minutes read (About 1843 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>可能是最简单的部署方式。</p>
+<p>当在flask里使用app.run（）的时候在运行flask的时候，我们只是将app部署到了一个测试环境，而真正将我们的app分享给更多人使用，需要经过更多的步骤。</p>
+<p>首先简单讲一下我对docker的理解（完全不一定准确）。dockerhub就如同GitHub一样，是一个托管平台，不同点在于github托管的是代码，dockerhub托管的则是镜像。Github的代码clone到本地后并不能直接使用，比如当在代码中import numpy as np或者library(tidyr)，而你的环境中并没有这个包时，显然这些代码并不能一下子顺利的运行，你需要先下载所有依赖的包，另外也可能存在潜在的路径问题。对于docker来说，它所保存的不仅是代码，而是将整个代码和它运行的环境打包成一个镜像，用户下载镜像，得到的就是一个独立自洽的小宇宙（其实是小宇宙模板，我们之后再说），可以不经任何处理，直接使用。</p>
+<p>与镜像-image紧密相连的一个概念是容器-container。 镜像只是一个模板，从这个模板我们可以创造出很多容器，每个容器内部都是一样的环境，运行一样的程序。也就是说，只要每个用户都将同样的镜像下载到本地，并在此之上运行容器，那么我们就可以保证所有用户都在一样的环境下运行一样的程序。</p>
+<p>来详细看一下实际操作。</p></body></html>
+        <p class="article-more-link">
+            <a href="/2021/08/06/flask-docker/#more">Read More</a>
+        </p>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
             <a href="/2021/07/26/Podcast/" itemprop="url">Podcast</a>
         
     </h1>
@@ -426,48 +467,6 @@
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/05/19/India/" itemprop="url">印度神话梳理与印度起源的宗教们</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-05-19T15:54:24.000Z" itemprop="datePublished">May 19 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            a minute read (About 160 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>印度神话对于小时候只看过中国神话、希腊罗马神话的我，可谓是一个极其新鲜的话题，只可惜年龄导致的记忆力衰退让我即使看了三遍书，也还是不能记得大概。<br>所以写一个关于印度神话的memo，对于我掌握印度神话的脉络还是非常有必要的。篇幅不宜过长，否则也不利于经常复习。</p>
-<p>本篇主要包含以下几个部分：</p>
-<ul>
-<li>摩诃婆罗多 ~ 薄伽梵歌</li>
-<li>罗摩衍那</li>
-<li>沙恭达罗</li>
-<li>宗教与民族</li>
-</ul>
-</body></html>
     
     </div>
     
