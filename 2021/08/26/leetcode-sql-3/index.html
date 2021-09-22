@@ -91,6 +91,7 @@
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <html><head></head><body><h3 id="题目619-Biggest-Single-Number"><a href="#题目619-Biggest-Single-Number" class="headerlink" title="题目619. Biggest Single Number:"></a><strong>题目619. Biggest Single Number:</strong></h3><p>Table my_numbers contains many numbers in column num including duplicated ones.<br>Can you write a SQL query to find the biggest number, which only appears once.</p>
+<span id="more"></span>
 <table>
 <thead>
 <tr>
@@ -141,7 +142,6 @@
 <td>If there is no such number, just output null.</td>
 </tr>
 </tbody></table>
-<span id="more"></span>
 <p><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">select max(num)</span><br><span class="line">from</span><br><span class="line">(</span><br><span class="line">select num</span><br><span class="line">from my_numbers</span><br><span class="line">group by num</span><br><span class="line">having count(*)=1</span><br><span class="line">)t</span><br></pre></td></tr></tbody></table></figure>
 <p>或者</p>

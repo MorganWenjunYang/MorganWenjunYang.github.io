@@ -112,9 +112,9 @@
 </tr>
 </tbody></table>
 <p>visit_date is the primary key for this table.<br>Each row of this table contains the visit date and visit id to the stadium with the number of people during the visit.<br>No two rows will have the same visit_date, and as the id increases, the dates increase as well.</p>
+<span id="more"></span>
 <p>Write an SQL query to display the records with three or more rows with consecutive id’s, and the number of people is greater than or equal to 100 for each.</p>
 <p>Return the result table ordered by visit_date in ascending order.</p>
-<span id="more"></span>
 <p><strong>Answer:</strong></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">select distinct a.*</span><br><span class="line">from stadium a</span><br><span class="line">join stadium b</span><br><span class="line">join stadium c</span><br><span class="line">on (c.id-b.id=1 and b.id-a.id=1)</span><br><span class="line">or (a.id-b.id=1 and b.id-c.id=1)</span><br><span class="line">or (b.id-a.id=1 and b.id-c.id=2)</span><br><span class="line">where a.people&gt;=100</span><br><span class="line">and b.people&gt;=100</span><br><span class="line">and c.people&gt;=100</span><br><span class="line">order by a.id</span><br></pre></td></tr></tbody></table></figure>
 <p>或者</p>
