@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>Sorting - Morgan Freewoman</title>
+<title>初学算法：排序 - Morgan Freewoman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -70,7 +70,7 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            Sorting
+            初学算法：排序
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -84,13 +84,14 @@
         <span class="column is-narrow">
             
             
-            6 minutes read (About 901 words)
+            6 minutes read (About 902 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
         <html><head></head><body><p>下面简要罗列一下主要的几种排序方法</p>
+<span id="more"></span>
 <h3 id="随机数生成器"><a href="#随机数生成器" class="headerlink" title="随机数生成器"></a>随机数生成器</h3><figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from random import randint</span><br><span class="line">def generateRandomArray(n, min, max):</span><br><span class="line">    arr = []</span><br><span class="line">    arr = [randint(min, max) for x in range(n)]</span><br><span class="line">    return arr</span><br></pre></td></tr></tbody></table></figure>
 
 <h3 id="是否有序"><a href="#是否有序" class="headerlink" title="是否有序"></a>是否有序</h3><figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def isSorted(alist):</span><br><span class="line">    for i in range(0, len(alist)-1):</span><br><span class="line">        if alist[i] &gt; alist[i+1]:</span><br><span class="line">            return False</span><br><span class="line">    return True</span><br></pre></td></tr></tbody></table></figure>
