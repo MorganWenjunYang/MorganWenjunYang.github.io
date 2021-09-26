@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>SQL的执行顺序 - Morgan Freewoman</title>
+<title>初学算法：二分法查找 - Morgan Freewoman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -70,13 +70,13 @@
     <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            SQL的执行顺序
+            初学算法：二分法查找
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
         <span class="column is-narrow">
             
-                <time datetime="2021-09-22T13:08:56.000Z" itemprop="datePublished">Sep 22 2021</time>
+                <time datetime="2021-09-25T00:42:31.000Z" itemprop="datePublished">Sep 25 2021</time>
             
         </span>
         
@@ -84,26 +84,22 @@
         <span class="column is-narrow">
             
             
-            3 minutes read (About 474 words)
+            a few seconds read (About 43 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><p>很多朋友觉得sql的执行顺序是面试经常会涉及的部分，那为什么面试会经常涉及到sql的执行顺序呢，小编也不清楚，下面就和小编一起了解一下sql的执行顺序吧:)</p>
-<span id="more"></span>
-<p>reference：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6864555988873707527">https://juejin.cn/post/6864555988873707527</a></p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(8)SELECT&nbsp;(9)DISTINCT&nbsp;&lt;select_list&gt;</span><br><span class="line">(1)FROM&nbsp;&lt;left_table&gt;</span><br><span class="line">(3)&lt;join_type&gt;JOIN&nbsp;&lt;right_table&gt;</span><br><span class="line">(2)ON&lt;join_condition&gt;</span><br><span class="line">(4)WHERE&lt;where_condition&gt;</span><br><span class="line">(5)GROUP&nbsp;BY&lt;group_by_list&gt;</span><br><span class="line">(6)WITH&nbsp;{CUBE|ROLLUP}</span><br><span class="line">(7)HAVING&lt;having_condition&gt;</span><br><span class="line">(10)ORDER&nbsp;BY&lt;order_by_list&gt;</span><br><span class="line">(11)LIMIT&lt;limit_number&gt;</span><br></pre></td></tr></tbody></table></figure>
-
-<p>FROM：对FROM子句中的左表<left_table>和右表<right_table>执行笛卡儿积（Cartesian product），产生虚拟表VT1<br>ON：对虚拟表VT1应用ON筛选，只有那些符合<join_condition>的行才被插入虚拟表VT2中<br>JOIN：如果指定了OUTER JOIN（如LEFT OUTER JOIN、RIGHT OUTER JOIN），那么保留表中未匹配的行作为外部行添加到虚拟表VT2中，产生虚拟表VT3。如果FROM子句包含两个以上表，则对上一个连接生成的结果表VT3和下一个表重复执行步骤1）～步骤3），直到处理完所有的表为止<br>WHERE：对虚拟表VT3应用WHERE过滤条件，只有符合<where_condition>的记录才被插入虚拟表VT4中<br>GROUP BY：根据GROUP BY子句中的列，对VT4中的记录进行分组操作，产生VT5<br>CUBE|ROLLUP：对表VT5进行CUBE或ROLLUP操作，产生表VT6<br>HAVING：对虚拟表VT6应用HAVING过滤器，只有符合<having_condition>的记录才被插入虚拟表VT7中。<br>SELECT：第二次执行SELECT操作，选择指定的列，插入到虚拟表VT8中<br>DISTINCT：去除重复数据，产生虚拟表VT9<br>ORDER BY：将虚拟表VT9中的记录按照<order_by_list>进行排序操作，产生虚拟表VT10。<br>LIMIT：取出指定行的记录，产生虚拟表VT11，并返回给查询用户</order_by_list></having_condition></where_condition></join_condition></right_table></left_table></p>
-<p>具体详细步骤：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6864555988873707527">https://juejin.cn/post/6864555988873707527</a></p>
+        <html><head></head><body><p>以下是leetcode中，我觉得难度适中的几道关于二分查找的题目，在这里记录下来，以供未来复习之用。</p>
 </body></html>
     
     </div>
     
     <div class="columns is-variable is-1 is-multiline is-mobile">
     
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/SQL/">#SQL</a></span>
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Algorithm/">#Algorithm</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Leetcode/">#Leetcode</a></span>
     
     </div>
     
@@ -111,12 +107,12 @@
     <div class="columns is-mobile is-multiline article-nav">
         <span class="column is-12-mobile is-half-desktop  article-nav-prev">
             
-            <a href="/2021/09/25/tree/">初学算法：树</a>
+            <a href="/2021/09/25/DFS-BFS/">初学算法：图中的DFS和BFS</a>
             
         </span>
         <span class="column is-12-mobile is-half-desktop  article-nav-next">
             
-            <a href="/2021/09/12/style-transfer/">风格迁移</a>
+            <a href="/2021/09/25/tree/">初学算法：树</a>
             
         </span>
     </div>
