@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            a few seconds read (About 16 words)
+            3 minutes read (About 400 words)
         </span>
         
     </div>
@@ -92,8 +92,37 @@
     
         <html><head></head><body><p>下面简要罗列一下关于排序的题目</p>
 <span id="more"></span>
-<p>977</p>
-<p>905</p>
+<h3 id="977-Squares-of-a-Sorted-Array"><a href="#977-Squares-of-a-Sorted-Array" class="headerlink" title="977. Squares of a Sorted Array"></a>977. Squares of a Sorted Array</h3><p>Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.</p>
+<ol>
+<li><p>sort (Time Complexity O(NlogN); Space Complexity O(N))</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def sortedSquares(self, A):</span><br><span class="line">        return sorted(x*x for x in A)</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>Two Pointer (Time Complexity O(N); Space Complexity O(N))</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def sortedSquares(self, nums: List[int]) -&gt; List[int]:</span><br><span class="line">        l = len(nums)</span><br><span class="line">        result = l*[0]</span><br><span class="line"></span><br><span class="line">        left = 0</span><br><span class="line">        right = l-1</span><br><span class="line">        for i in range(l-1, -1, -1):</span><br><span class="line">            if abs(nums[left]) &gt; abs(nums[right]):</span><br><span class="line">                sq = nums[left]</span><br><span class="line">                left += 1</span><br><span class="line"></span><br><span class="line">            else:</span><br><span class="line">                sq = nums[right]</span><br><span class="line">                right -= 1</span><br><span class="line"></span><br><span class="line">            result[i] = sq * sq</span><br><span class="line"></span><br><span class="line">        return result</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h3 id="905-Sort-Array-By-Parity"><a href="#905-Sort-Array-By-Parity" class="headerlink" title="905. Sort Array By Parity"></a>905. Sort Array By Parity</h3><p>Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers. 奇数和偶数内部不需要排序。<br>Return any array that satisfies this condition.</p>
+<ol>
+<li><p>just sort (Time Complexity O(NlogN); Space Complexity O(N))</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def sortArrayByParity(self, A):</span><br><span class="line">        A.sort(key = lambda x: x % 2)</span><br><span class="line">        return A</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>Two pass (Time Complexity O(N); Space Complexity O(N))</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def sortArrayByParity(self, A):</span><br><span class="line">        return ([x for x in A if x % 2 == 0] +</span><br><span class="line">                [x for x in A if x % 2 == 1])</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>quickSort (in-place)</p>
+</li>
+</ol>
+<ul>
+<li>Intuition</li>
+</ul>
+<p>If we want to do the sort in-place, we can use quicksort, a standard textbook algorithm.</p>
+<ul>
+<li>Algorithm</li>
+</ul>
+<p>We’ll maintain two pointers i and j. The loop invariant is everything below i has parity 0 (ie. A[k] % 2 == 0 when k &lt; i), and everything above j has parity 1.</p>
+<p>Then, there are 4 cases for (A[i] % 2, A[j] % 2):</p>
+<p>If it is (0, 1), then everything is correct: i++ and j–.</p>
+<p>If it is (1, 0), we swap them so they are correct, then continue.</p>
+<p>If it is (0, 0), only the i place is correct, so we i++ and continue.</p>
+<p>If it is (1, 1), only the j place is correct, so we j– and continue.</p>
+<p>Throughout all 4 cases, the loop invariant is maintained, and j-i is getting smaller. So eventually we will be done with the array sorted as desired.</p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def sortArrayByParity(self, A):</span><br><span class="line">        i, j = 0, len(A) - 1</span><br><span class="line">        while i &lt; j:</span><br><span class="line">            if A[i] % 2 &gt; A[j] % 2:</span><br><span class="line">                A[i], A[j] = A[j], A[i]</span><br><span class="line"></span><br><span class="line">            if A[i] % 2 == 0: i += 1</span><br><span class="line">            if A[j] % 2 == 1: j -= 1</span><br><span class="line"></span><br><span class="line">        return A</span><br></pre></td></tr></tbody></table></figure>
 </body></html>
     
     </div>
