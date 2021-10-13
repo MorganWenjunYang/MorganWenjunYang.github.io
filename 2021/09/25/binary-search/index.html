@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            14 minutes read (About 2026 words)
+            14 minutes read (About 2034 words)
         </span>
         
     </div>
@@ -161,7 +161,7 @@
 <ol>
 <li><p>Binary Search with naive check</p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def findLength(self, A, B):</span><br><span class="line">        def check(length):</span><br><span class="line">            seen = set(tuple(A[i:i+length])</span><br><span class="line">                       for i in range(len(A) - length + 1))</span><br><span class="line">            return any(tuple(B[j:j+length]) in seen</span><br><span class="line">                       for j in range(len(B) - length + 1))</span><br><span class="line"></span><br><span class="line">        lo, hi = 0, min(len(A), len(B)) + 1</span><br><span class="line">        while lo &lt; hi:</span><br><span class="line">            mi = (lo + hi) // 2</span><br><span class="line">            if check(mi):</span><br><span class="line">                lo = mi + 1</span><br><span class="line">            else:</span><br><span class="line">                hi = mi</span><br><span class="line">        return lo - 1</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>DP<br>Since a common subarray of A and B must start at some A[i] and B[j], let dp[i][j] be the longest common prefix of A[i:] and B[j:]. Whenever A[i] == B[j], we know dp[i][j] = dp[i+1][j+1] + 1. Also, the answer is max(dp[i][j]) over all i, j.</p>
+<li><p>DP (Time O(M<em>N)  Space O(M</em>N))<br>Since a common subarray of A and B must start at some A[i] and B[j], let dp[i][j] be the longest common prefix of A[i:] and B[j:]. Whenever A[i] == B[j], we know dp[i][j] = dp[i+1][j+1] + 1. Also, the answer is max(dp[i][j]) over all i, j.</p>
 </li>
 </ol>
 <p>We can perform bottom-up dynamic programming to find the answer based on this recurrence. Our loop invariant is that the answer is already calculated correctly and stored in dp for any larger i, j.</p>
