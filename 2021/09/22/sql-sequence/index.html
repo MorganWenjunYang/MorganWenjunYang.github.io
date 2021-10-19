@@ -84,13 +84,13 @@
         <span class="column is-narrow">
             
             
-            3 minutes read (About 474 words)
+            4 minutes read (About 550 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><p>很多朋友觉得sql的执行顺序是面试经常会涉及的部分，那为什么面试会经常涉及到sql的执行顺序呢，小编也不清楚，下面就和小编一起了解一下sql的执行顺序吧:)</p>
+        <html><head></head><body><p>SQL执行顺序是怎么回事呢？SQL相信大家都很熟悉，但是SQL执行顺序是怎么回事呢，下面就让小编带大家一起了解吧。SQL执行顺序，其实就是SQL语句执行的顺序，大家可能会很惊讶SQL怎么会执行顺序呢？但事实就是这样，小编也感到非常惊讶。这就是关于SQL执行顺序的事情了，大家有什么想法呢，欢迎在评论区告诉小编一起讨论哦！</p>
 <span id="more"></span>
 <p>reference：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6864555988873707527">https://juejin.cn/post/6864555988873707527</a></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(8)SELECT&nbsp;(9)DISTINCT&nbsp;&lt;select_list&gt;</span><br><span class="line">(1)FROM&nbsp;&lt;left_table&gt;</span><br><span class="line">(3)&lt;join_type&gt;JOIN&nbsp;&lt;right_table&gt;</span><br><span class="line">(2)ON&lt;join_condition&gt;</span><br><span class="line">(4)WHERE&lt;where_condition&gt;</span><br><span class="line">(5)GROUP&nbsp;BY&lt;group_by_list&gt;</span><br><span class="line">(6)WITH&nbsp;{CUBE|ROLLUP}</span><br><span class="line">(7)HAVING&lt;having_condition&gt;</span><br><span class="line">(10)ORDER&nbsp;BY&lt;order_by_list&gt;</span><br><span class="line">(11)LIMIT&lt;limit_number&gt;</span><br></pre></td></tr></tbody></table></figure>
