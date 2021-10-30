@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>初学算法：树II (DFS、BFS、二分查找树) - Morgan Freewoman</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="">
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-light.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                <img src="/images/logo.png" alt="" height="28">
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            初学算法：树II (DFS、BFS、二分查找树)
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-10-25T11:18:57.000Z" itemprop="datePublished">Oct 25 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            4 minutes read (About 556 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>今天，我们大家又欢聚在一起是研究我最喜欢的‘树’，我要敬我的好题目，感谢她，for nothing。我也发自内心地祝愿她，从此以后被我征服。</p>
+<span id="more"></span>
+
+
+<h3 id="EASY"><a href="#EASY" class="headerlink" title="EASY"></a>EASY</h3><h4 id="617-Merge-Two-Binary-Trees"><a href="#617-Merge-Two-Binary-Trees" class="headerlink" title="617. Merge Two Binary Trees"></a>617. Merge Two Binary Trees</h4><p>You are given two binary trees root1 and root2.</p>
+<p>Imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not. You need to merge the two trees into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of the new tree.</p>
+<p>Return the merged tree.</p>
+<p>Note: The merging process must start from the root nodes of both trees.</p>
+<p>Example:<br><img src="https://assets.leetcode.com/uploads/2021/02/05/merge.jpg" alt="p617"></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: root1 = [1,3,2,5], root2 = [2,1,3,null,4,null,7]</span><br><span class="line">Output: [3,4,5,5,4,null,7]</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="104-Maximum-Depth-of-Ninary-Tree"><a href="#104-Maximum-Depth-of-Ninary-Tree" class="headerlink" title="104. Maximum Depth of Ninary Tree"></a>104. Maximum Depth of Ninary Tree</h4><p>Given the root of a binary tree, return its maximum depth.</p>
+<p>A binary tree’s maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
+<p>Example:<br><img src="https://assets.leetcode.com/uploads/2020/11/26/tmp-tree.jpg" alt="p104"></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: root = [3,9,20,null,null,15,7]</span><br><span class="line">Output: 3</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="671-Second-Minimum-Node-in-a-Binary-Tree"><a href="#671-Second-Minimum-Node-in-a-Binary-Tree" class="headerlink" title="671. Second Minimum Node in a Binary Tree"></a>671. Second Minimum Node in a Binary Tree</h4><p>Given a non-empty special binary tree consisting of nodes with the non-negative value, where each node in this tree has exactly two or zero sub-node. If the node has two sub-nodes, then this node’s value is the smaller value among its two sub-nodes. More formally, the property root.val = min(root.left.val, root.right.val) always holds.</p>
+<p>Given such a binary tree, you need to output the second minimum value in the set made of all the nodes’ value in the whole tree.</p>
+<p>If no such second minimum value exists, output -1 instead.</p>
+<p>Example:<br><img src="https://assets.leetcode.com/uploads/2020/10/15/smbt1.jpg" alt="p671"></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: root = [2,2,5,null,null,5,7]</span><br><span class="line">Output: 5</span><br><span class="line">Explanation: The smallest value is 2, the second smallest value is 5.</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="783-Minimum-Distance-Between-BST-Nodes"><a href="#783-Minimum-Distance-Between-BST-Nodes" class="headerlink" title="783. Minimum Distance Between BST Nodes"></a>783. Minimum Distance Between BST Nodes</h4><p>Given the root of a Binary Search Tree (BST), return the minimum difference between the values of any two different nodes in the tree.</p>
+<p>Example:<br><img src="https://assets.leetcode.com/uploads/2021/02/05/bst1.jpg" alt="p783"></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: root = [4,2,6,1,3]</span><br><span class="line">Output: 1</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h4 id="112-Path-Sum"><a href="#112-Path-Sum" class="headerlink" title="112. Path Sum"></a>112. Path Sum</h4><p>Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.</p>
+<p>A leaf is a node with no children.<br><img src="https://assets.leetcode.com/uploads/2021/01/18/pathsum1.jpg" alt="p112"></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22</span><br><span class="line">Output: true</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="111-Minimum-Depth-of-Binary-Tree"><a href="#111-Minimum-Depth-of-Binary-Tree" class="headerlink" title="111. Minimum Depth of Binary Tree"></a>111. Minimum Depth of Binary Tree</h4><p>Given a binary tree, find its minimum depth.</p>
+<p>The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.</p>
+<p>Note: A leaf is a node with no children.</p>
+<p>Example:<br><img src="https://assets.leetcode.com/uploads/2020/10/12/ex_depth.jpg" alt="p111"></p>
+<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: root = [3,9,20,null,null,15,7]</span><br><span class="line">Output: 2</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h3 id="MEDIUM"><a href="#MEDIUM" class="headerlink" title="MEDIUM"></a>MEDIUM</h3><h4 id="1448-Count-Good-Nodes-in-Binary-Tree"><a href="#1448-Count-Good-Nodes-in-Binary-Tree" class="headerlink" title="1448. Count Good Nodes in Binary Tree"></a>1448. Count Good Nodes in Binary Tree</h4><h4 id="236-Lowest-Common-Ancestor-of-a-Binary-Tree"><a href="#236-Lowest-Common-Ancestor-of-a-Binary-Tree" class="headerlink" title="236. Lowest Common Ancestor of a Binary Tree"></a>236. Lowest Common Ancestor of a Binary Tree</h4><h4 id="863-All-Nodes-Distance-K-in-Binary-Tree"><a href="#863-All-Nodes-Distance-K-in-Binary-Tree" class="headerlink" title="863. All Nodes Distance K in Binary Tree"></a>863. All Nodes Distance K in Binary Tree</h4><h4 id="199-Binary-Tree-Right-Side-View"><a href="#199-Binary-Tree-Right-Side-View" class="headerlink" title="199. Binary Tree Right Side View"></a>199. Binary Tree Right Side View</h4></body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Algorithm/">#Algorithm</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Leetcode/">#Leetcode</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/10/27/docker/">Docker小知识</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/10/20/magnificent-century/">宏伟世纪与土耳其继承法</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 Morgan Y&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        target="_blank" rel="noopener" href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+</body>
+</html>
