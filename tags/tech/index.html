@@ -92,46 +92,16 @@
         <span class="column is-narrow">
             
             
-            2 minutes read (About 268 words)
+            2 minutes read (About 269 words)
         </span>
         
     </div>
     <div class="article-entry is-size-6-mobile" itemprop="articleBody">
     
-        <html><head></head><body><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byaxg00Gf9I">https://www.youtube.com/watch?v=byaxg00Gf9I</a></p>
-<ol>
-<li>Multiple Tests</li>
-</ol>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import pytest</span><br><span class="line"></span><br><span class="line">def test_methods1():</span><br><span class="line">    x = 5</span><br><span class="line">    y = 10</span><br><span class="line">    assert x == y</span><br><span class="line"></span><br><span class="line">def test_method2():</span><br><span class="line">    a = 15</span><br><span class="line">    b = 20</span><br><span class="line">    assert a+5 == b</span><br></pre></td></tr></tbody></table></figure>
-
-<ol start="2">
-<li>Grouping Multiple Tests</li>
-</ol>
-<ul>
-<li><p>Matching</p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import pytest</span><br><span class="line"></span><br><span class="line">def test_methods1():</span><br><span class="line">    x = 5</span><br><span class="line">    y = 10</span><br><span class="line">    assert x == y</span><br><span class="line"></span><br><span class="line">def test_method2():</span><br><span class="line">    a = 15</span><br><span class="line">    b = 20</span><br><span class="line">    assert a+5 == b</span><br><span class="line"></span><br><span class="line">def test_doooo3():</span><br><span class="line">    a = 10</span><br><span class="line">    b = 20</span><br><span class="line">    assert a == b</span><br></pre></td></tr></tbody></table></figure>
-<p>In this case, use <code>pytest test.py -k method</code> will deselect the last test, but only select the first 2</p>
-</li>
-<li><p>Mark</p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import pytest</span><br><span class="line"></span><br><span class="line">@pytest.mark.one</span><br><span class="line">def test_methods1():</span><br><span class="line">    x = 5</span><br><span class="line">    y = 10</span><br><span class="line">    assert x == y</span><br><span class="line"></span><br><span class="line">@pytest.mark.two</span><br><span class="line">def test_method2():</span><br><span class="line">    a = 15</span><br><span class="line">    b = 20</span><br><span class="line">    assert a+5 == b</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>In this case, use <code>pytest test.py -m one/two</code> will specify the test with marker one or two. Use <code>@pytest.mark.skip</code> will skip the test. Use <code>@pytest.mark.xfail</code> even the test fails, it will not be counted.</p>
-</li>
-</ul>
-<ul>
-<li>Class<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class TestClass:</span><br><span class="line">    def test_methods1():</span><br><span class="line">        x = 5</span><br><span class="line">        y = 10</span><br><span class="line">        assert x == y</span><br><span class="line"></span><br><span class="line">    def test_method2():</span><br><span class="line">        a = 15</span><br><span class="line">        b = 20</span><br><span class="line">        assert a+5 == b</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-In this case, you can directly ues <code>pytest test.py</code></li>
-</ul>
-<ol start="3">
-<li><p>Fixture</p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import pyteset</span><br><span class="line"></span><br><span class="line">@pytest.fixture</span><br><span class="line">def numbers():</span><br><span class="line">    a = 10</span><br><span class="line">    b = 20</span><br><span class="line">    c = 25</span><br><span class="line">    return [a,b,c]</span><br><span class="line"></span><br><span class="line">def test_method1(numbers):</span><br><span class="line">    x = 15</span><br><span class="line">    assert numbers[0] == x</span><br><span class="line"></span><br><span class="line">def test_method1(numbers):</span><br><span class="line">    y = 20</span><br><span class="line">    assert numbers[2] == y</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<p>The fixture function will run every time before running any tests. There is also a scope parameter that could determine the moment when fixture will be run, e.g. the start of each session.</p>
-</li>
-<li><p>Paramentrized Tests</p>
-<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import pytest</span><br><span class="line"></span><br><span class="line">@pytest.mark.parametrize("x,y,z", [(10,20,200), (20,40,200)])</span><br><span class="line">def test_method(x,y,z):</span><br><span class="line">    assert x*y == z    </span><br></pre></td></tr></tbody></table></figure>
-<p>This will call 2 tests for two sets of parameters in one session.</p>
-</li>
-</ol>
-</body></html>
+        <html><head></head><body><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=byaxg00Gf9I">https://www.youtube.com/watch?v=byaxg00Gf9I</a></p></body></html>
+        <p class="article-more-link">
+            <a href="/2021/10/31/pytest/#more">Read More</a>
+        </p>
     
     </div>
     
