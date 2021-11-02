@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
-<title>Tag: Tech - Morgan Freewoman</title>
+<title>pytest框架要点 - Morgan Freewoman</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
@@ -65,20 +65,12 @@
     </div>
 </nav>
 
-    <section class="section section-heading">
+    <section class="section">
     <div class="container">
-        <div class="content">
-            <h5>#Tech</h5>
-        </div>
-    </div>
-</section>
-<section class="section">
-    <div class="container">
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
+    <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
-            <a href="/2021/10/31/pytest/" itemprop="url">pytest框架要点</a>
+            pytest框架要点
         
     </h1>
     <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
@@ -136,203 +128,31 @@ This will call 2 tests for two sets of parameters in one session.</li>
     
     </div>
     
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Tech/">#Tech</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Python/">#Python</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/10/27/docker/">Docker小知识</a>
+            
+        </span>
+    </div>
     
 </article>
 
 
 
 
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/10/27/docker/" itemprop="url">Docker小知识</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-10-27T11:49:30.000Z" itemprop="datePublished">Oct 27 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            4 minutes read (About 580 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><h2 id="1-Dockerfile的形式"><a href="#1-Dockerfile的形式" class="headerlink" title="1. Dockerfile的形式"></a>1. Dockerfile的形式</h2><figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine(:tag) # 基于alpine镜像的某个版本建立新镜像</span><br><span class="line">LABEL k="v" k1='v1' # 对镜像没有作用，只作为标识用于docker inspect</span><br><span class="line">WORKDIR /app # 指定shell语句运行在镜像哪个目录下</span><br><span class="line">COPY src/ /app # 将当前宿主机下的文件复制到镜像的目录下, 如将src目录下所有文件复制到app目录</span><br><span class="line">RUN echo 321 &gt;&gt; 1.txt # 运行shell语句：追加123到/app/1.txt(因为当前工作目录是/app)</span><br><span class="line">ONBUILD ENV C=100 # 如果其他镜像基于该镜像，则会指定环境变量C=100</span><br><span class="line">ENV A=10 # 指定环境变量</span><br><span class="line">CMD tail -f 1.txt # 指定镜像运行时的脚本</span><br><span class="line">### RUN和CMD都是脚本，但RUN是容器创建时的运行的脚本，CMD是容器开始运行时的脚本</span><br></pre></td></tr></tbody></table></figure></body></html>
-        <p class="article-more-link">
-            <a href="/2021/10/27/docker/#more">Read More</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/08/23/spark-intro/" itemprop="url">spark_intro</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-08-23T11:31:48.000Z" itemprop="datePublished">Aug 23 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            a few seconds read (About 21 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>本篇主要是《Spark快速大数据分析》一书的笔记。</p>
-</body></html>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/08/06/streamlit/" itemprop="url">Streamlit的基本操作</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-08-06T13:55:55.000Z" itemprop="datePublished">Aug 6 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            a few seconds read (About 83 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>Streamlit是目前为止，我觉得最简易、最不用花心思在呈现上的一个webapp包，让开发者可以更关注内容，而不是外观展现。本文旨在记录Streamlit的基本操作，以期建立一个模板，以供未来长期反复使用。</p>
-</body></html>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/08/06/ticketmaster/" itemprop="url">TicketMaster刷票器</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-08-06T13:44:26.000Z" itemprop="datePublished">Aug 6 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            2 minutes read (About 279 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>疫情期间奋发图强，写了一个专门爬取东航余票的程序，但因为是第一次接触，所以做的非常粗糙，也毫不具有实用性，所以现在想要改进/重塑这个程序，使之能够在实际生活中使用。</p>
-<p>Previous：持续爬取网站余票信息，如果有符合条件的，即发送消息到指定邮箱，提醒购票。<br>这里就存在几个问题。</p>
-<ol>
-<li>东航有反爬机制，有很大概率被封IP, 而且封一次长达几天之久。</li>
-<li>使用IP代理大部分需要付费，免费IP的质量很差，有效时间也很多，需要额外维护程序来抓取新的免费IP，并持续的检查IP是否有效。</li>
-<li>发送提醒购票信息这种操作并不及时，不能解决我们抢票的需求。需要实现以下功能：当程序发现可选余票时，要模仿点击操作，将该票锁住。</li>
-</ol>
-</body></html>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/08/06/flask-docker/" itemprop="url">用Docker部署Flask到阿里云</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-08-06T13:39:33.000Z" itemprop="datePublished">Aug 6 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            12 minutes read (About 1843 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>可能是最简单的部署方式。</p>
-<p>当在flask里使用app.run（）的时候在运行flask的时候，我们只是将app部署到了一个测试环境，而真正将我们的app分享给更多人使用，需要经过更多的步骤。</p>
-<p>首先简单讲一下我对docker的理解（完全不一定准确）。dockerhub就如同GitHub一样，是一个托管平台，不同点在于github托管的是代码，dockerhub托管的则是镜像。Github的代码clone到本地后并不能直接使用，比如当在代码中import numpy as np或者library(tidyr)，而你的环境中并没有这个包时，显然这些代码并不能一下子顺利的运行，你需要先下载所有依赖的包，另外也可能存在潜在的路径问题。对于docker来说，它所保存的不仅是代码，而是将整个代码和它运行的环境打包成一个镜像，用户下载镜像，得到的就是一个独立自洽的小宇宙（其实是小宇宙模板，我们之后再说），可以不经任何处理，直接使用。</p>
-<p>与镜像-image紧密相连的一个概念是容器-container。 镜像只是一个模板，从这个模板我们可以创造出很多容器，每个容器内部都是一样的环境，运行一样的程序。也就是说，只要每个用户都将同样的镜像下载到本地，并在此之上运行容器，那么我们就可以保证所有用户都在一样的环境下运行一样的程序。</p>
-<p>来详细看一下实际操作。</p></body></html>
-        <p class="article-more-link">
-            <a href="/2021/08/06/flask-docker/#more">Read More</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-    
     </div>
 </section>
     <footer class="footer">
