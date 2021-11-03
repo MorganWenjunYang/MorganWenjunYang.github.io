@@ -84,7 +84,7 @@
         <span class="column is-narrow">
             
             
-            15 minutes read (About 2197 words)
+            15 minutes read (About 2200 words)
         </span>
         
     </div>
@@ -132,7 +132,7 @@
 <ol>
 <li>Recursie:<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># Definition for a binary tree node.</span><br><span class="line"># class TreeNode:</span><br><span class="line">#     def __init__(self, val=0, left=None, right=None):</span><br><span class="line">#         self.val = val</span><br><span class="line">#         self.left = left</span><br><span class="line">#         self.right = right</span><br><span class="line">class Solution:</span><br><span class="line">    def isSymmetric(self, root: Optional[TreeNode]) -&gt; bool:</span><br><span class="line"></span><br><span class="line">        def isMirror(r1, r2):</span><br><span class="line">            if r1 is None and r2 is None: return True</span><br><span class="line">            if r1 is None or r2 is None: return False</span><br><span class="line">            return (r1.val==r2.val) and isMirror(r1.right,r2.left) and isMirror(r1.left,r2.right)</span><br><span class="line"></span><br><span class="line">        return isMirror(root,root)</span><br></pre></td></tr></tbody></table></figure></li>
 </ol>
-<h4 id="108-Convert-Sorted-Array-to-Binary-Search-TreeNode"><a href="#108-Convert-Sorted-Array-to-Binary-Search-TreeNode" class="headerlink" title="108. Convert Sorted Array to Binary Search TreeNode"></a>108. Convert Sorted Array to Binary Search TreeNode</h4><p>Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.</p>
+<h4 id="108-Convert-Sorted-Array-to-Binary-Search-TreeNode-二分法"><a href="#108-Convert-Sorted-Array-to-Binary-Search-TreeNode-二分法" class="headerlink" title="108. Convert Sorted Array to Binary Search TreeNode (二分法)"></a>108. Convert Sorted Array to Binary Search TreeNode (二分法)</h4><p>Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.</p>
 <p>A height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.</p>
 <p>Example 1:<br><img src="https://assets.leetcode.com/uploads/2021/02/18/btree1.jpg" alt="p108_1"><br><img src="https://assets.leetcode.com/uploads/2021/02/18/btree2.jpg" alt="p108_2"></p>
 <figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: nums = [-10,-3,0,5,9]</span><br><span class="line">Output: [0,-3,9,-10,null,5]</span><br><span class="line">Explanation: [0,-10,5,null,-3,null,9] is also accepted:</span><br></pre></td></tr></tbody></table></figure>

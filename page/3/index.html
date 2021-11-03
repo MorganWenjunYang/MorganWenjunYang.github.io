@@ -71,6 +71,127 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
+            <a href="/2021/09/10/sql-improvement-3/" itemprop="url">mysql小知识及进阶知识</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-09-10T14:40:33.000Z" itemprop="datePublished">Sep 10 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            an hour read (About 9331 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h3 id="入门知识查漏补缺"><a href="#入门知识查漏补缺" class="headerlink" title="入门知识查漏补缺"></a>入门知识查漏补缺</h3><ol>
+<li>创建数据库 <code>create database dbname;</code></li>
+<li>查看已有数据库 <code>show databases;</code></li>
+<li>切换到某数据库 <code>use dbname;</code></li>
+<li>删除数据库 <code>drop database dbname;</code></li>
+<li>用<code>create table tbname(id int, var1 varchar(20), sex char(2))</code>建表，<code>用desc tbname</code>查看表的基本信息</li>
+<li>查看建立表的语句<code>show create table tbname job</code></li>
+<li>删除表 <code>drop table tbname</code>，这种删除可以通过日志恢复，如果使用<code>truncate table tbname</code>则会永久删除该表</li></ol></body></html>
+        <p class="article-more-link">
+            <a href="/2021/09/10/sql-improvement-3/#more">Read More</a>
+        </p>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            <a href="/2021/09/06/sql-improvement-2/" itemprop="url">SQL调优和注意事项（下）</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-09-06T12:47:08.000Z" itemprop="datePublished">Sep 6 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            37 minutes read (About 5563 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h3 id="General-Rule-of-thumb"><a href="#General-Rule-of-thumb" class="headerlink" title="General Rule of thumb"></a>General Rule of thumb</h3><ol>
+<li>要尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引</li>
+<li>在经常需要进行检索的字段上创建索引，比如要按照表字段username进行检索，那么就应该在姓名字段上创建索引</li>
+<li>一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有 必要。索引并不是越多越好，<strong>索引固然可以提高相应的 select 的效率，但同时也降低了 insert 及 update 的效率</strong>，因为 insert 或 update 时有可能会重建索引，所以怎样建索引需要慎重考虑，视具体情况而定。</li></ol></body></html>
+        <p class="article-more-link">
+            <a href="/2021/09/06/sql-improvement-2/#more">Read More</a>
+        </p>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            <a href="/2021/08/30/sql-improvement/" itemprop="url">SQL调优和注意事项（上）</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-08-30T12:17:39.000Z" itemprop="datePublished">Aug 30 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            26 minutes read (About 3958 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h3 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h3><h4 id="SQL调优的基本原则"><a href="#SQL调优的基本原则" class="headerlink" title="SQL调优的基本原则"></a>SQL调优的基本原则</h4><p>“二八原理” 是一个普遍的真理，特别是在计算机的世界中表现的更加明显，那就是20%的代码的资源消耗占用了80%的总资源消耗。SQL语句也是一种代码，因此它也符合这个原理。在进行SQL调优的时候应该把主要精力放到这20%的最消耗系统资 源的SQL语句中，不要想把所有的SQL语句都调整到最优状态。<br>很多DBMS都提供了非常好的工具用来分析系统中所有SQL语句资源消耗的工具，借助于这些工具发现占用系统资源排在前面的SQL语句，然后尝试对它们进行优化，优化后再次执行分析，迭代这一过程，直到系统中没有明显的系统资源消耗异常的SQL语句为止。</p></body></html>
+        <p class="article-more-link">
+            <a href="/2021/08/30/sql-improvement/#more">Read More</a>
+        </p>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
             <a href="/2021/08/26/leetcode-sql-3/" itemprop="url">Leetcode上的SQL题（Part 3）</a>
         
     </h1>
@@ -356,158 +477,6 @@
 
 
     
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/07/26/Music-general/" itemprop="url">音乐随感</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-07-26T10:08:06.000Z" itemprop="datePublished">Jul 26 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            2 minutes read (About 255 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>瞎说，胡说，想到什么说什么，勿认真</p>
-<p><strong>Aaliyah</strong></p>
-<ul>
-<li><em>Age Ain’t Nothing But A Number</em></li>
-</ul>
-<p><strong>Alicia Keys</strong></p>
-<ul>
-<li><em>The Diary of Alicia Keys</em></li>
-<li><em>As I Am</em></li>
-</ul>
-<p><strong>Aimer</strong></p>
-<ul>
-<li><em>After Dark</em></li>
-</ul>
-<p><strong>Amy Winehouse</strong></p>
-<ul>
-<li><em>Frank</em></li>
-</ul>
-<p><strong>Annie Lennox</strong></p>
-<ul>
-<li><em>Medusa</em></li></ul></body></html>
-        <p class="article-more-link">
-            <a href="/2021/07/26/Music-general/#more">Read More</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/07/26/leetcode-sql/" itemprop="url">Leetcode上的SQL题（Part 1）</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-07-26T10:05:53.000Z" itemprop="datePublished">Jul 26 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            16 minutes read (About 2392 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>本篇整理Leetcode SQL当中比较有代表性、比较易错的某些题目，以供未来学习、复习之用。</p>
-<h3 id="题目1179-Reformat-Department-Table"><a href="#题目1179-Reformat-Department-Table" class="headerlink" title="题目1179. Reformat Department Table:"></a><strong>题目1179. Reformat Department Table:</strong></h3><p>Table: Department</p>
-<table>
-<thead>
-<tr>
-<th>Column Name</th>
-<th>Type</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>id</td>
-<td>int</td>
-</tr>
-<tr>
-<td>revenue</td>
-<td>int</td>
-</tr>
-<tr>
-<td>month</td>
-<td>varchar</td>
-</tr>
-</tbody></table></body></html>
-        <p class="article-more-link">
-            <a href="/2021/07/26/leetcode-sql/#more">Read More</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
-        <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            <a href="/2021/07/26/Linked-List/" itemprop="url">初学算法：链接表题目汇总</a>
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            
-                <time datetime="2021-07-26T04:02:25.000Z" itemprop="datePublished">Jul 26 2021</time>
-            
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            14 minutes read (About 2167 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><p>以下是leetcode中，我觉得难度适中的几道链接表题目，在这里记录下来，以供未来复习之用。</p></body></html>
-        <p class="article-more-link">
-            <a href="/2021/07/26/Linked-List/#more">Read More</a>
-        </p>
-    
-    </div>
-    
-    
-</article>
-
-
-
-
-    
     
         
 <nav class="pagination is-centered is-rounded" role="navigation" aria-label="pagination">
@@ -526,6 +495,8 @@
         <li><a class="pagination-link is-current" href="/page/3/">3</a></li>
         
         <li><a class="pagination-link" href="/page/4/">4</a></li>
+        
+        <li><a class="pagination-link" href="/page/5/">5</a></li>
         
     </ul>
 </nav>
