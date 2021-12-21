@@ -157,6 +157,52 @@
         <article class="article content gallery" itemscope itemprop="blogPost">
     <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
         
+            <a href="/2021/12/01/ParseTreeToPikchr/" itemprop="url">ParseTreeToPikchr</a>
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            
+                <time datetime="2021-12-01T14:09:09.000Z" itemprop="datePublished">Dec 1 2021</time>
+            
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            3 minutes read (About 376 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><p>首先在setup Antlr4的时候就遇到了一些困难，获得了一些经验教训，总结如下。</p>
+<ol>
+<li>默认的CLASSPATH是当前路径，如果自行设置将会override默认设定。所以记得要加上‘.’在修改过的当前路径里。</li>
+<li>如果CLASSPATH中用的是目录路径, i.e., /path/to/jarUpperFolder，那么java只能读到该文件夹下的class文件，而不能得到jar文件，因此要包括jar文件在内的所有可读文件需要在CLASSPATH中加入/path/to/jarUpperFolder/*</li>
+<li>注意修改java的link后，也要记得修改javac的路径</li>
+<li>makefile的头部all，说明了以下哪些block会被make运行</li>
+<li>make clean会运行clean block中的内容</li>
+<li>普通的git clone不会保留softlink</li>
+<li>在~/.bashrc中修改环境变量等<figure class="highlight plaintext hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/path/to/javahome</span><br><span class="line">export CLASSPATH=...</span><br></pre></td></tr></tbody></table></figure></li>
+<li>  在Linux系统中，运行Shell脚本，出现了如下错误： <code>one-more.sh: line 1: $'\r': command not found 1</code>。出现这样的错误，是因为Shell脚本在Windows系统编写时，每行结尾是\r\n，而在Linux系统中行每行结尾是\n，所以在Linux系统中运行脚本时，会认为\r是一个字符，导致运行错误。解决：<code>sed -i 's/\r//' xxx.sh</code></li>
+<li>永远记得在用java -cp 时囊括所有你需要的路径，无论是用‘：’分割列举还是全部放在$CLASSPATH当中。</li>
+</ol>
+</body></html>
+    
+    </div>
+    
+    
+</article>
+
+
+
+
+    
+        <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
             <a href="/2021/10/18/missing-visit/" itemprop="url">Subject Visit可视化</a>
         
     </h1>
